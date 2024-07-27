@@ -1,6 +1,6 @@
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+const config = {
   apiKey: "AIzaSyD3Jm5e0V1zCFUN210qiGISH51tm3fUJh8",
   authDomain: "remote-spain.firebaseapp.com",
   projectId: "remote-spain",
@@ -10,4 +10,4 @@ const firebaseConfig = {
   measurementId: "G-3H4B5WKS23"
 };
 
-export default firebaseConfig;
+export const firebaseConfig = config;

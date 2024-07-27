@@ -4,6 +4,10 @@
 */
 'use client'
 import { useState, useEffect } from 'react';
+import { db } from '../../../../lib/firebase/clientApp';
+import { collection, getDocs } from "firebase/firestore/lite";
+import { getJobList } from "../../../../lib/firebase/firestore";
+
 import FeedItem from '../feedItem/feedItem';
 import SearchBar from '../searchBar/searchBar';
 import OptionMenu from '../optionMenu/optionMenu';
@@ -161,11 +165,14 @@ export default function FeedTable() {
   const [ dataList, setDataList ] = useState([]);
   const [ filter, setFilter ] = useState('');
   useEffect(() => {
-    setTimeout(() => {
-	console.log('use effect test');
-	setDataList(data);
-    }, 1000)
+    const fetchItems = async () => {
+      const querySnapshot = await getDocs(collection(db, "jobList"))
+      setDataList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+    }
+    fetchItems()
   } ,[])
+
+  console.log(dataList)
 
   function filterSearch (myArray, key, property){
     // match letters  like search input 
@@ -187,25 +194,30 @@ export default function FeedTable() {
     return setDataList(m)
   }
   
+  function resetFilters() {
+    console.log('reset filter')
+    setDataList(data)
+  }
+  
   return (
       <div className="mt-8 mx-auto w-full max-w-6xl px-6">
 	{/* start utility Bar */}
 	<div className="mt-3 flex flex-col sm:flex-row">
 	  {/* Search Bar*/}
 	  <div className="ml-2 my-1 block relative sm:min-h-max w-48">
-	    <SearchBar data={ {...searchBarsuggestor, key: 'role', filter: collectFilterCriteria } }/> 
+	    <SearchBar data={ {...searchBarsuggestor, key: 'role', filter: collectFilterCriteria, reset: resetFilters } }/> 
 	  </div>
 	  {/* option menu list count filter*/}
 	  <div className="ml-2 my-1 block relative sm:min-h-max w-48">
-	    <OptionMenu data={ {...optionMenuLoaction, filter: collectFilterCriteria } } />
+	    <OptionMenu data={ {...optionMenuLoaction, filter: collectFilterCriteria, reset: resetFilters} } />
 	  </div>
 	  {/* option menu activity filter */}
 	  <div className='ml-2 my-1 block relative sm:min-h-max w-48'>
-	    <OptionMenu data={ {...optionMenuJobClassFilter, filter: collectFilterCriteria} } />
+	    <OptionMenu data={ {...optionMenuJobClassFilter, filter: collectFilterCriteria, reset: resetFilters} } />
 	  </div>
 	  {/* drop down range slider*/}
 	  <div className='ml-2 my-1 block relative sm:min-h-max w-48'>
-	    <RangeBar data={ {...rangeSalarySlider, filter: collectRangeValue}} />
+	    <RangeBar data={ {...rangeSalarySlider, filter: collectRangeValue, reset: resetFilters}} />
 	  </div>
 	</div>
 	{/* end utlity Bar */}
@@ -216,6 +228,7 @@ export default function FeedTable() {
 	  })}
 	</div>
 	{/* end list items with pagination */}
+	  <button onClick={resetFilters}>reset</button>
       </div>
   )
 }

@@ -20,8 +20,8 @@ export default function SearchBar({data}) {
   );
 }
 
-function SearchInput({data: {id, title, options, icon, filter, key, formMode} }) {
-  const { value, isOpen, handleChange, setObjectProps } = useContext(DropdownContext);
+function SearchInput({data: {id, title, options, icon, filter, reset, key, formMode} }) {
+  const { value, setValue, isOpen, handleChange, setObjectProps } = useContext(DropdownContext);
   // this hook is used to send props up to parent dropdown wrapper
   useEffect(() => {
     setObjectProps({id, title, formMode, action, icon});
@@ -34,7 +34,7 @@ function SearchInput({data: {id, title, options, icon, filter, key, formMode} })
     filter(val, key)
   };
   if (!isOpen) { return null }
-
+  
   return (
     <ul className={utilityBarClasses.dropDownUL}>
 	{options.map(({oid, val, oicon}) => {
