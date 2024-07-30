@@ -1,5 +1,6 @@
 'use client'
-import { utilityBarClasses } from '../../../constants/classes';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { utilityBarClasses } from '../../../../constants/classes';
 import DropdownWrapper, { DropdownContext } from '../dropdown/dropdown';
 import { useContext, useEffect } from 'react';
 import Image from 'next/image';
@@ -20,38 +21,31 @@ export default function SearchBar({data}) {
   );
 }
 
-function SearchInput({data: {id, title, options, icon, filter, reset, key, formMode} }) {
-  const { value, setValue, isOpen, handleChange, setObjectProps } = useContext(DropdownContext);
+function SearchInput({data: {id, title, options, icon, formMode} }) {
+  const { value, setValue, isOpen, 
+	  handleSearch, setObjectProps } = useContext(DropdownContext);
+
   // this hook is used to send props up to parent dropdown wrapper
   useEffect(() => {
-    setObjectProps({id, title, formMode, action, icon});
+    setObjectProps({id, title, formMode,  icon});
   }, []);
-  // this hook is used to log changes 
-  useEffect(() =>  console.log(value, 'effect search level'), [handleChange]);
-  // action is the UI exit to fetch data
-  const action = (val) => {
-    console.log('action search submit', val)
-    filter(val, key)
-  };
-  if (!isOpen) { return null }
   
+  if (!isOpen) { return null }
   return (
     <ul className={utilityBarClasses.dropDownUL}>
 	{options.map(({oid, val, oicon}) => {
-	  return <SearchSuggestionOption key={oid} data={{ oid, val, oicon,  handleChange, action }} />
+	  return <SearchSuggestionOption key={oid} data={{ oid, val, oicon, handleSearch }} />
         })}
     </ul>
   )
 }
 
-// SearchSuggestionOption
-
 function SearchSuggestionOption(
-  {data : { oid, val, oicon, handleChange, action } }
+  {data : { oid, val, oicon, handleSearch } }
 ) {
   return (
     <li className={utilityBarClasses.dropDownLI}  id={oid} 
-	  onClick={() => handleChange(val, action)} >
+	  onClick={() => handleSearch('tagList', val)} >
       <div className={utilityBarClasses.dropDownItemContentWrapper}>
 	<Image
 	  {...oicon}
@@ -67,3 +61,4 @@ function SearchSuggestionOption(
      </li>
   )
 }
+

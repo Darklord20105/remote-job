@@ -1,7 +1,7 @@
 'use client'
 import { useContext, useEffect } from 'react';
 import Image from 'next/image';
-import { utilityBarClasses } from '../../../constants/classes';
+import { utilityBarClasses } from '../../../../constants/classes';
 import DropdownWrapper, { DropdownContext } from '../dropdown/dropdown';
 
 export default function RangeBar({data}) {
@@ -12,19 +12,14 @@ export default function RangeBar({data}) {
   )
 }
 
-function RangeSlider({data: {id, title, icon, min, max, filter}}) {
-  const { value, isOpen, setValue, handleComplexChange, toggleDropdown, closeDropdown, objectProps, setObjectProps } = useContext(DropdownContext);
+function RangeSlider({data: {id, title, icon, min, max}}) {
+  const { value, isOpen, setValue, handleSearch, toggleDropdown, closeDropdown, objectProps, setObjectProps } = useContext(DropdownContext);
 
   // this hook is used to send props up to parent dropdown wrapper
   useEffect(() => {
-    setObjectProps({id, title, icon, action});
+    setObjectProps({id, title, icon});
   }, [])
-  // action is the UI exit to fetch data
-  const action = (val) => {
-    console.log('action ',val)
-    filter(val)
-  }
-  
+
   if (!isOpen) { return null };
   return (
     <ul className={utilityBarClasses.dropDownUL}>
@@ -38,8 +33,8 @@ function RangeSlider({data: {id, title, icon, min, max, filter}}) {
 	  	<input type="range" 
 		  id={id}
 	  	  className={utilityBarClasses.dropDownRangeBar} 
-	          value={value} min={min} max={max} step="1" 
-	  	  onChange={(e) => handleComplexChange(e, action)}
+	          min={min} max={max} step="1" 
+	  	  onChange={(e) => handleSearch(id, e.target.value)}
 	  	/>
               </div>
 	  </div>

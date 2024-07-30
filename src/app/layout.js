@@ -6,6 +6,11 @@ import Footer from './common/footer.js'
 import { cn } from './utils/cn.js';
 import { inter } from './fonts/fonts.js';
 
+export const metadata = {
+  title: 'Home',
+  description: 'Welcome to Next.js',
+}
+
 function Layout({
   children,
   className,

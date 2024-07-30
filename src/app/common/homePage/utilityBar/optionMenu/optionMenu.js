@@ -1,7 +1,7 @@
 'use client'
 import { useContext, useEffect } from 'react';
 import Image from 'next/image';
-import { utilityBarClasses } from '../../../constants/classes';
+import { utilityBarClasses } from '../../../../constants/classes';
 import DropdownWrapper, { DropdownContext } from '../dropdown/dropdown';
 
 
@@ -28,31 +28,28 @@ export default function OptionMenu( { data }  ) {
 
 
 function OptionList( {data : {id, title, icon, options, filter}} ) {
-  const { value, isOpen, setValue, handleChange, toggleDropdown, closeDropdown, objectProps, setObjectProps } = useContext(DropdownContext);
+  const { value, isOpen, setValue, handleSearch, toggleDropdown, 
+	  closeDropdown, objectProps, setObjectProps } = useContext(DropdownContext);
    
   // this hook is used to send props up to parent dropdown wrapper
   useEffect(() => {
-    setObjectProps({id, title, action, icon})
+    setObjectProps({id, title, icon})
   }, [])
-  // action is the UI exit to fetch data
-  const action = (val) => {
-    console.log('trigger action in option menu '+ title , val );
-    filter(val, id)
-  }
+
   if (!isOpen) { return null }
   return (
     <ul className={utilityBarClasses.dropDownUL}>
 	{options.map(({oid, val, oicon}) => {
-	  return <OptionItem key={oid} data={{ oid, val, oicon, handleChange, action }} />
+	  return <OptionItem key={oid} data={{ oid, val, oicon, id, handleSearch }} />
 	})}
     </ul>
   )
 };
 
-function OptionItem({data : { oid, val, oicon, handleChange, action }}) {
+function OptionItem({data : { oid, val, oicon, id, handleSearch }}) {
   return (
     <li className={utilityBarClasses.dropDownLI} id={oid} 
-	  onClick={() => handleChange(val, action)}  >
+	  onClick={() => handleSearch(id, val)}  >
       <div className={utilityBarClasses.dropDownItemContentWrapper}>
 	  <Image  
 	    {...oicon}

@@ -40,3 +40,13 @@ Array of Strings
 priority: String with 3 options (high, medium, normal) *optional not required*
 /*  used to change background color of important jobs or good jobs or normal jobs */
 
+----------
+pull recent repo but no changes locally
+
+If you don't care about any local changes (including untracked or generated files or subrepositories which just happen to be here) and just want a copy from the repo:
+
+git reset --hard HEAD
+git clean -xffd
+git pull
+
+Again, this will nuke any changes you've made locally so use carefully. Think about rm -Rf when doing this.

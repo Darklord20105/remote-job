@@ -6,7 +6,8 @@ import {
   createContext 
 } from 'react';
 import Image from 'next/image';
-import { utilityBarClasses } from '../../../constants/classes';
+import { utilityBarClasses } from '../../../../constants/classes';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
 function DropdownSvg() {
   return(
@@ -16,13 +17,27 @@ function DropdownSvg() {
   )
 };
 
+export function SearchBarClassy({handleSearch}) {
+  const searchParams = useSearchParams();
+  return (
+      <input
+        className={utilityBarClasses.dropDownSearchInput}
+        placeholder='type here to search'                                                 
+	  onChange={(e) => {
+          handleSearch('tagList', e.target.value);
+        }}
+         defaultValue={searchParams.get('query')?.toString()}
+      />
+  );
+}
+
 export const DropdownContext = createContext('light');
 
 // this function serves as the default interface for the dropdown menu - what gets rendered on first page load - 
 
 function MainDropdown(
-  { data: { value, toggleDropdown, handleComplexChange,
-    handleSubmit, objectProps :{id, title, formMode, action, icon} } }
+  { data: { value, toggleDropdown, handleComplexChange, handleSearch, 
+	   objectProps :{id, title, formMode, action, icon} } }
 ){
   
   return (
@@ -42,16 +57,7 @@ function MainDropdown(
 	  an action is triggered like fetching specific posts
 	*/}
 	{formMode ? 
-	   <form onSubmit={e => handleSubmit(e, action) }>
-	     <input 
-		type='text' 
-		className={utilityBarClasses.dropDownSearchInput} 
-	        onChange={e => handleComplexChange(e)}
-		id={id}
-		placeholder='Search'
-		value={value || ''}
-	     />
-	   </form>
+	   <SearchBarClassy handleSearch={handleSearch} />
 	 : <span className={utilityBarClasses.dropDownTitleWrapper}>{value ? value: title}</span>}
       </span>                                                                     
       <span className={utilityBarClasses.dropDownIcon}>
@@ -75,6 +81,12 @@ export default function DropdownWrapper({ children }) {
   // props used in dropdown default interface, typically it is used to send data from dropdown child components up to MainDropdown component
   const [objectProps, setObjectProps] = useState({});
 
+  ///// new code handle search with url params
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  ///
+
   /* HANDLE VALUE CHANGES Functions */
   // a function used in dropdown to capture the value when the user selects an option , also serves to close down the menu OBJECT
   const handleChange = (val, action) => {
@@ -96,11 +108,30 @@ export default function DropdownWrapper({ children }) {
 
   // this function to trigger action on submit
   
-  const handleSubmit = (e, action) => {
-    e && e.preventDefault();
-    console.log(value, 'submit search input  level');
+  const handleSearch = (query ,term) => {
+    const ba = searchParams.toString()
+    const params = new URLSearchParams(searchParams);
+    console.log(ba, 'kkkkkkkaaaakakajnsnsnannan')
+
+    if (ba.length > 0) {
+      let a = ba.split('=')
+      let b = a[0];
+      params.delete(b);
+    }
+
+
+    console.log(query, 'propety')
+    console.log(term, 'value');
+    if (term) {                                                                         
+      params.set(query, term);
+    } else {
+      params.delete(query);
+    };
+    
+    
+    replace(`${pathname}?${params.toString()}`);
+    // replace(`/?${params.toString()}`);
     closeDropdown()
-    action(value)
   }
 
   /* MENU Functions show hide */
@@ -118,11 +149,11 @@ export default function DropdownWrapper({ children }) {
   return(
     <DropdownContext 
        value={{value, isOpen, setValue, 
-	 handleChange, handleComplexChange, handleSubmit, 
+	 handleChange, handleComplexChange, handleSearch,
 	 closeDropdown, objectProps, setObjectProps 
        }}>
       <MainDropdown 
-	data={{value, toggleDropdown, objectProps,handleSubmit, 
+	data={{value, toggleDropdown, objectProps, handleSearch,
 	 handleComplexChange}}
       />
       {children}
