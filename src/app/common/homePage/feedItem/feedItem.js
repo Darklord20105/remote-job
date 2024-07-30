@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import globe from '../../../assets/img/green-globe.svg'
 import money from '../../../assets/img/money-bag.svg'
 import temp from '../../../assets/img/temp.svg';
@@ -14,10 +15,18 @@ function Info({data : {text, img} }) {
 	  src={img}
 	  width='100%'
 	  height='100%'
-	  alt="Follow us on Twitter"
+	  alt={text + ' info image'}
 	/> 
        </div> }
        <p>{text}</p>
+    </div>
+  )
+}
+
+function Tag({data : {text, handleSearch} }) {
+  return (                                                                                          
+    <div className="border-grey rounded-[0.5em] text-black bg-white text-[12px] px-[0.5em] py-[0.05em] cursor-pointer flex justify-center items-center gap-1 border-solid border-slate-300 border" onClick={() => handleSearch('tagList', text)}>
+      <p>{text}</p>
     </div>
   )
 }
@@ -42,7 +51,7 @@ function RenderTextLogo({props: {company}}) {
 
 function LogoImage() {
   return (
-    <Image src={logo} width='100%' alt='logo' className='rounded-full border'/>
+    <Image priority src={logo} width='100%' alt='logo' className='rounded-full border'/>
   )
 }
 
@@ -59,12 +68,38 @@ export default function FeedItem({
   data: { company, role, createdAt, logo, location, 
 	  salaryRange, verified, hot, jobType, tagList, priority }
 }) {
+  // tag functionality
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const handleSearch = (query ,term) => {
+    const ba = searchParams.toString();
+    const params = new URLSearchParams(searchParams);
+    console.log(ba, 'kkkkkkkaaaakakajnsnsnannan');
+    if (ba.length > 0) {
+      let a = ba.split('=')
+      let b = a[0];
+      params.delete(b);
+    }
+
+    console.log(query, 'propety');
+    console.log(term, 'value');
+    if (term) {
+      params.set(query, term);
+    } else {
+      params.delete(query);
+    };
+    replace(`${pathname}?${params.toString()}`);
+  }
+
+  // customizations
   const tags = tagList.slice(0, 3)
   let date = calculateDayDifference(createdAt);
   let styling = priorityHandler(priority);
   const { bg, text } = styling;
   const salary = `$${salaryRange.min}k - $${salaryRange.max}k`
-
+  
   return (
     <div className={'flex m-2 p-2 text-gray-300 gap-1 rounded-lg border-solid border-slate-500 border relative ' + bg}>                                                                             
 	{/* section 1 logo alone */}
@@ -84,7 +119,7 @@ export default function FeedItem({
 
 	<div className='tag-list flex items-center justify-start gap-4 sm-hidden ' style={{ flex: 1 }}>
 	  {tags.map(i => {
-	    return <Info data={ {text: i}}/>
+	    return <Tag data={ {text: i, handleSearch} }/>
 	  })}	  
 	</div>
 	<div className={'flex justify-center items-center sm-hidden font-semibold ' + text} style={{ flex: 0.25 }}>
