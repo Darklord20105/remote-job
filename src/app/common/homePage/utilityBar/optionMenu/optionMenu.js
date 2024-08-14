@@ -28,7 +28,7 @@ export default function OptionMenu( { data }  ) {
 
 
 function OptionList( {data : {id, title, icon, options, filter}} ) {
-  const { value, isOpen, setValue, handleSearch, toggleDropdown, 
+  const { value, isOpen, setValue, handleSearch, handleOption,  
 	  closeDropdown, objectProps, setObjectProps } = useContext(DropdownContext);
    
   // this hook is used to send props up to parent dropdown wrapper
@@ -40,16 +40,16 @@ function OptionList( {data : {id, title, icon, options, filter}} ) {
   return (
     <ul className={utilityBarClasses.dropDownUL}>
 	{options.map(({oid, val, oicon}) => {
-	  return <OptionItem key={oid} data={{ oid, val, oicon, id, handleSearch }} />
+	  return <OptionItem key={oid} data={{ oid, val, oicon, id, handleOption }} />
 	})}
     </ul>
   )
 };
 
-function OptionItem({data : { oid, val, oicon, id, handleSearch }}) {
+function OptionItem({data : { oid, val, oicon, id, handleOption }}) {
   return (
     <li className={utilityBarClasses.dropDownLI} id={oid} 
-	  onClick={() => handleSearch(id, val)}  >
+	  onClick={() => handleOption(val)}  >
       <div className={utilityBarClasses.dropDownItemContentWrapper}>
 	  <Image  
 	    {...oicon}

@@ -22,8 +22,7 @@ export default function SearchBar({data}) {
 }
 
 function SearchInput({data: {id, title, options, icon, formMode} }) {
-  const { value, setValue, isOpen, 
-	  handleSearch, setObjectProps } = useContext(DropdownContext);
+  const { isOpen, handleSearch, setObjectProps } = useContext(DropdownContext);
 
   // this hook is used to send props up to parent dropdown wrapper
   useEffect(() => {
@@ -45,7 +44,7 @@ function SearchSuggestionOption(
 ) {
   return (
     <li className={utilityBarClasses.dropDownLI}  id={oid} 
-	  onClick={() => handleSearch('tagList', val)} >
+	  onClick={() => handleSearch(val)} >
       <div className={utilityBarClasses.dropDownItemContentWrapper}>
 	<Image
 	  {...oicon}

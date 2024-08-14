@@ -23,10 +23,8 @@ export function SearchBarClassy({handleSearch}) {
       <input
         className={utilityBarClasses.dropDownSearchInput}
         placeholder='type here to search'                                                 
-	  onChange={(e) => {
-          handleSearch('tagList', e.target.value);
-        }}
-         defaultValue={searchParams.get('query')?.toString()}
+	 onChange={(e) => { handleSearch(e.target.value); }}
+         // defaultValue={searchParams.get('filter')?.toString()}
       />
   );
 }
@@ -36,7 +34,7 @@ export const DropdownContext = createContext('light');
 // this function serves as the default interface for the dropdown menu - what gets rendered on first page load - 
 
 function MainDropdown(
-  { data: { value, toggleDropdown, handleComplexChange, handleSearch, 
+  { data: { value, toggleDropdown,  handleSearch, 
 	   objectProps :{id, title, formMode, action, icon} } }
 ){
   
@@ -67,7 +65,7 @@ function MainDropdown(
 }
 
 
-// The main reason for this component is to make a dropdown menu wrapper for all 
+// The main reason for this component was to make a dropdown menu wrapper for all 
 // possible forms in this project such as option menu, search, range slider, where
 // this component handles all the logic 
 // it now fully supports option menu with dropdown of option items
@@ -81,37 +79,16 @@ export default function DropdownWrapper({ children }) {
   // props used in dropdown default interface, typically it is used to send data from dropdown child components up to MainDropdown component
   const [objectProps, setObjectProps] = useState({});
 
-  ///// new code handle search with url params
+  // new handle search with url params
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  ///
 
-  /* HANDLE VALUE CHANGES Functions */
-  // a function used in dropdown to capture the value when the user selects an option , also serves to close down the menu OBJECT
-  const handleChange = (val, action) => {
-	console.log('on change run', val)
-        setValue(val);
-	closeDropdown();
-	action(val)
-  };
+  // this function is used to to send query params into url
   
-  // a function to handle slider change
-  
-  const handleComplexChange = useCallback((e, action) => {
-    console.log(e.target.value);
-    setValue(e.target.value.toString());
-    closeDropdown();
-    action && action(e.target.value.toString())
-    
-  }, [setValue]);
-
-  // this function to trigger action on submit
-  
-  const handleSearch = (query ,term) => {
-    const ba = searchParams.toString()
+  const handleOption = (term) => {
+    const ba = searchParams.toString();
     const params = new URLSearchParams(searchParams);
-    console.log(ba, 'kkkkkkkaaaakakajnsnsnannan')
 
     if (ba.length > 0) {
       let a = ba.split('=')
@@ -119,18 +96,48 @@ export default function DropdownWrapper({ children }) {
       params.delete(b);
     }
 
-
-    console.log(query, 'propety')
-    console.log(term, 'value');
-    if (term) {                                                                         
-      params.set(query, term);
+    if (term) {
+      params.append('sort-by', term);
     } else {
-      params.delete(query);
+      params.delete('sort-by');
+    }
+
+    replace(`${pathname}?${params.toString()}`);
+    closeDropdown()
+  }
+
+  const handleSearch = (term) => {
+    const params = new URLSearchParams(searchParams);
+
+    function preventDuplicateFilter(arr) {
+      let a = new Set(arr);
+      return [...a]                                                                  
     };
     
+    let previousTerm = params.getAll('filter') || [];
+                                                                                      
+    // if we have a previous item we need to merge our new term
+    // first we need to delete our old filter and make new merged one                
+    // // it was quite hard to do this                                                   
+    // // PLEASE DON'T CHANGE UNLESS YOU KNOW WHAT TO DO !!!
+    if (previousTerm.length > 0) {
+      // if we have already a param in url delete it
+      params.delete('filter');
+      console.log(previousTerm, "before push new param");
+
+      let a = previousTerm.join("").split(" ");
+      console.log("try to fix before", a);
+      a.push(term);
+      let b = preventDuplicateFilter(a);
+      console.log("try fixing stage 2", b);
+
+      let newTerm = b.join(' ');
+      params.append('filter', newTerm);
+    } else {                                                                           
+      params.append('filter', term);
+    }
     
     replace(`${pathname}?${params.toString()}`);
-    // replace(`/?${params.toString()}`);
     closeDropdown()
   }
 
@@ -148,13 +155,11 @@ export default function DropdownWrapper({ children }) {
 
   return(
     <DropdownContext 
-       value={{value, isOpen, setValue, 
-	 handleChange, handleComplexChange, handleSearch,
+       value={{value, isOpen, setValue, handleSearch, handleOption,
 	 closeDropdown, objectProps, setObjectProps 
        }}>
       <MainDropdown 
-	data={{value, toggleDropdown, objectProps, handleSearch,
-	 handleComplexChange}}
+	data={{value, toggleDropdown, objectProps, handleSearch }}
       />
       {children}
     </DropdownContext>

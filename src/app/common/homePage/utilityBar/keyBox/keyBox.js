@@ -2,24 +2,50 @@ import Image from 'next/image';
 import { utilityBarClasses } from '../../../../constants/classes';
 import close from '../../../../assets/img/close.svg';
 
-export default function KeyBox({query : { queryList, clearSearch}}) {
+export  function KeyBox({ query: { queryKey, clearOneCriteria } }) {
+  console.log('key box', queryKey)
   return (
     <button type="button"
       className={utilityBarClasses.dropDownButton}
-      onClick={clearSearch}
+      onClick={() => clearOneCriteria(queryKey)}
     >
       <span className={utilityBarClasses.dropDownButtonChildrenWrapper}>
-	<Image
+        <Image
           src={close}
           priority
           alt={'close icon'}
           className={utilityBarClasses.dropDownItemContentImage}
         />
         <span className={utilityBarClasses.dropDownTitleWrapper}>
-	  {queryList[1]}</span>
+          {queryKey}
+        </span>
       </span>
-      <span className={utilityBarClasses.dropDownIcon}>
-        
-      </span>
+      {/* <span className={utilityBarClasses.dropDownIcon}>
+
+      </span> */}
     </button>)
-}
+};
+
+export  function KeyBoxClearAll({ query: { queryKey, resultCount, clearSearch } }) {
+  console.log('clear', queryKey)
+  return (
+    <button type="button"
+      className={utilityBarClasses.dropDownButton}
+      onClick={clearSearch}
+    >
+      <span className={utilityBarClasses.dropDownButtonChildrenWrapper}>
+        <Image
+          src={close}
+          priority
+          alt={'close icon'}
+          className={utilityBarClasses.dropDownItemContentImage}
+        />
+        <span className={utilityBarClasses.dropDownTitleWrapper}>
+          {queryKey} : {resultCount} results
+        </span>
+      </span>
+      {/* <span className={utilityBarClasses.dropDownIcon}>
+
+      </span> */}
+    </button>)
+};
