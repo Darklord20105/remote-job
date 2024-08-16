@@ -2,68 +2,14 @@
 import {
   useState,
   useEffect,
-  useCallback,
-  createContext 
+  createContext
 } from 'react';
-import Image from 'next/image';
 import { utilityBarClasses } from '../../../../constants/classes';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { DropdownSvg } from '../../../svg';
 
-function DropdownSvg() {
-  return(
-    <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-      <path fillRule="evenodd"  d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clipRule="evenodd" />
-    </svg>
-  )
-};
-
-export function SearchBarClassy({handleSearch}) {
-  const searchParams = useSearchParams();
-  return (
-      <input
-        className={utilityBarClasses.dropDownSearchInput}
-        placeholder='type here to search'                                                 
-	 onChange={(e) => { handleSearch(e.target.value); }}
-         // defaultValue={searchParams.get('filter')?.toString()}
-      />
-  );
-}
 
 export const DropdownContext = createContext('light');
-
-// this function serves as the default interface for the dropdown menu - what gets rendered on first page load - 
-
-function MainDropdown(
-  { data: { value, toggleDropdown,  handleSearch, 
-	   objectProps :{id, title, formMode, action, icon} } }
-){
-  
-  return (
-    <button type="button" 
-	  className={utilityBarClasses.dropDownButton} onClick={toggleDropdown} >
-      <span className={utilityBarClasses.dropDownButtonChildrenWrapper}>
-	<Image
-          {...icon}
-          priority
-	  alt={id}
-	  className={utilityBarClasses.dropDownItemContentImage}
-	/>
-	{/* 
-	  formMode is a Boolean to show search bar input with suggestions 
-	  as drop down menu list,
-	  when you type something or select an option
-	  an action is triggered like fetching specific posts
-	*/}
-	{formMode ? 
-	   <SearchBarClassy handleSearch={handleSearch} />
-	 : <span className={utilityBarClasses.dropDownTitleWrapper}>{value ? value: title}</span>}
-      </span>                                                                     
-      <span className={utilityBarClasses.dropDownIcon}>
-	  <DropdownSvg />
-       </span>                                                                   
-    </button>)
-}
-
 
 // The main reason for this component was to make a dropdown menu wrapper for all 
 // possible forms in this project such as option menu, search, range slider, where
@@ -83,23 +29,35 @@ export default function DropdownWrapper({ children }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const params = new URLSearchParams(searchParams);
+
+  function preventDuplicateFilter(arr) {
+    let a = new Set(arr);
+    return [...a]
+  };
 
   // this function is used to to send query params into url
-  
+
   const handleOption = (term) => {
-    const ba = searchParams.toString();
-    const params = new URLSearchParams(searchParams);
+    setValue(term)
+    let previousTerm = params.getAll('sort-by') || [];
 
-    if (ba.length > 0) {
-      let a = ba.split('=')
-      let b = a[0];
-      params.delete(b);
-    }
-
-    if (term) {
-      params.append('sort-by', term);
-    } else {
+    // if we have a previous item we need to merge our new term
+    // first we need to delete our old filter and make new merged one
+    // it was quite hard to do this                        
+    // // PLEASE DON'T CHANGE UNLESS YOU KNOW WHAT TO DO !!!
+    if (previousTerm.length > 0) {
+      // if we have already a param in url delete it
       params.delete('sort-by');
+      console.log(previousTerm, "before push new param");
+
+      let a = previousTerm.join("").split(" ");
+      console.log("try to fix before", a);
+
+      let newTerm = term
+      params.append('sort-by', newTerm);
+    } else {
+      params.append('sort-by', term);
     }
 
     replace(`${pathname}?${params.toString()}`);
@@ -107,18 +65,11 @@ export default function DropdownWrapper({ children }) {
   }
 
   const handleSearch = (term) => {
-    const params = new URLSearchParams(searchParams);
-
-    function preventDuplicateFilter(arr) {
-      let a = new Set(arr);
-      return [...a]                                                                  
-    };
-    
     let previousTerm = params.getAll('filter') || [];
-                                                                                      
+
     // if we have a previous item we need to merge our new term
-    // first we need to delete our old filter and make new merged one                
-    // // it was quite hard to do this                                                   
+    // first we need to delete our old filter and make new merged one
+    // it was quite hard to do this                        
     // // PLEASE DON'T CHANGE UNLESS YOU KNOW WHAT TO DO !!!
     if (previousTerm.length > 0) {
       // if we have already a param in url delete it
@@ -133,10 +84,10 @@ export default function DropdownWrapper({ children }) {
 
       let newTerm = b.join(' ');
       params.append('filter', newTerm);
-    } else {                                                                           
+    } else {
       params.append('filter', term);
     }
-    
+
     replace(`${pathname}?${params.toString()}`);
     closeDropdown()
   }
@@ -146,22 +97,77 @@ export default function DropdownWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // a function used to toggle the menu between show and hide
-  const toggleDropdown = () =>  setIsOpen(!isOpen);
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
   // a function used to close the menu
-  const closeDropdown = () =>  setIsOpen(false);
+  const closeDropdown = () => setIsOpen(false);
 
-  useEffect(() =>  console.log(value, 'effect root level'), [value] )
+  useEffect(() => console.log(value, 'effect root level'), [value])
 
-  return(
-    <DropdownContext 
-       value={{value, isOpen, setValue, handleSearch, handleOption,
-	 closeDropdown, objectProps, setObjectProps 
-       }}>
-      <MainDropdown 
-	data={{value, toggleDropdown, objectProps, handleSearch }}
+  return (
+    <DropdownContext
+      value={{
+        value, isOpen, setValue, handleSearch, handleOption,
+        closeDropdown, objectProps, setObjectProps
+      }}>
+      <MainDropdown
+        data={{ value, toggleDropdown, objectProps, handleSearch }}
       />
       {children}
     </DropdownContext>
   )
 };
+
+// this function serves as the default interface for the dropdown menu - what gets rendered on first page load - 
+
+function MainDropdown(
+  { data: { value, toggleDropdown, handleSearch,
+    objectProps: { id, title, formMode, Icon } } }
+) {
+  return (
+    <button type="button"
+      className={utilityBarClasses.dropDownButton} onClick={toggleDropdown} >
+      <span className={utilityBarClasses.dropDownButtonChildrenWrapper}>
+
+        <span className={utilityBarClasses.dropDownItemContentImage}>{Icon}</span>
+        {/* 
+	        formMode is a Boolean to show search bar input with suggestions 
+	        as drop down menu list,
+	        when you type something or select an option
+	        an action is triggered like fetching specific posts
+	      */}
+        {formMode ?
+          <SearchBarClassy handleSearch={handleSearch} />
+          : <span className={utilityBarClasses.dropDownTitleWrapper}>{value ? value : title}</span>}
+      </span>
+      <span className={utilityBarClasses.dropDownIcon}>
+        <DropdownSvg />
+      </span>
+    </button>)
+}
+
+export function SearchBarClassy({ handleSearch }) {
+  const searchParams = useSearchParams();
+  const [term, setTerm] = useState('')
+
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault(); handleSearch(term);
+    }}>
+      <input
+        className={utilityBarClasses.dropDownSearchInput}
+        placeholder='type here to search'
+        id='search'
+        name='search'
+        onChange={(e) => {
+          setTerm(e.target.value)
+        }}
+      // defaultValue={searchParams.get('filter')?.toString()}
+      />
+    </form>
+  );
+}
+
+
+
+

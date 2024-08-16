@@ -1,5 +1,34 @@
 import { db } from "./clientApp";
-import { collection, getDocs, getDoc, query, doc, where, orderBy, limit } from 'firebase/firestore/lite';
+import { collection, getDocs, getDoc, query, doc, where } from 'firebase/firestore/lite';
+
+function customFilter(arr, term) {
+  var matches = [];
+  if (!Array.isArray(arr)) return matches;
+
+  arr.forEach(function (i) {
+    if (i.tagList.includes(term)) {
+      matches.push(i);
+    }
+  });
+
+  return matches;
+}
+
+function gFilter(array, list, index = 1) {
+  let inner = [];
+  inner = customFilter(array, list[index]);
+
+  console.log(index + ' index versus querylist length ' + list.length);
+  console.log(inner, 'inner now before condition');
+  if (Number(index) < Number(list.length -1)) {
+    index = index + 1;
+    console.log('condition ok next index is: ', index);
+    console.log('shit list to next stage is: ', inner);
+    return gFilter(inner, list, index = index);
+  }
+  console.log('shit list', inner); 
+  return inner;
+}
 
 export async function fetchFilteredJobList(queryList) {
   const jobRef = collection(db, 'jobList');
@@ -8,18 +37,24 @@ export async function fetchFilteredJobList(queryList) {
   let filter;
   
   if (queryList.length > 0) {
-    filter = query(jobRef, where("tagList", "array-contains-any", queryList) );
+    filter = query(jobRef, where("tagList", "array-contains", queryList[0]) );
   } else { 
     filter = jobRef; 
   }
   
   try {
     let snapshot = await getDocs(filter);
-    console.log(snapshot, 'data from firestore snapshot');
+    let results = [];
 
-    return snapshot.docs.map(doc => {
-      return { id: doc.id, ...doc.data() }
-    });
+    snapshot.docs.map(doc => {
+      results.push({ id: doc.id, ...doc.data() })
+    });    
+    
+    if (queryList.length > 1) {
+      return gFilter(results, queryList);
+    }
+    return results;
+
   }
   catch (error) {
     let message = "couldn't get job list , reason: " + error.message;

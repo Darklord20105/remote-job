@@ -4,7 +4,7 @@ export const useFetchData = (fetchFunction, params) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -13,7 +13,7 @@ export const useFetchData = (fetchFunction, params) => {
         const result = await fetchFunction(params);
         if (result.message) {
           setError(result.message); // Handle specific error message
-        } else {
+        } else {	  
           setData(result);
         }
       } catch (err) {

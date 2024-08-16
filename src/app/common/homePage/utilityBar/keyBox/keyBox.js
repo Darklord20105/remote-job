@@ -2,8 +2,7 @@ import Image from 'next/image';
 import { utilityBarClasses } from '../../../../constants/classes';
 import close from '../../../../assets/img/close.svg';
 
-export  function KeyBox({ query: { queryKey, clearOneCriteria } }) {
-  console.log('key box', queryKey)
+export function KeyBox({ query: { queryKey, clearOneCriteria } }) {
   return (
     <button type="button"
       className={utilityBarClasses.dropDownButton}
@@ -26,8 +25,7 @@ export  function KeyBox({ query: { queryKey, clearOneCriteria } }) {
     </button>)
 };
 
-export  function KeyBoxClearAll({ query: { queryKey, resultCount, clearSearch } }) {
-  console.log('clear', queryKey)
+export function KeyBoxClearAll({ query: { queryKey, resultCount, clearSearch } }) {
   return (
     <button type="button"
       className={utilityBarClasses.dropDownButton}

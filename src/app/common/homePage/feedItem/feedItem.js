@@ -124,7 +124,9 @@ export default function FeedItem({
       </div>
       {/* section 2 details with /location/ /salary/ /full or contract/ */}
       <div className='details ml-4' style={{ width: '30rem' }}>
-        <Details props={{ company, role, text }} />
+        <Link href={`job/${id}/job-details`}>
+	  <Details props={{ company, role, text }} />
+	</Link>
         <div className='detail-list flex gap-2 my-2'>
           <Info data={{ text: location, img: globe }} />
           <Info data={{ text: salary, img: money }} />
@@ -139,8 +141,7 @@ export default function FeedItem({
         })}
       </div>
       <div className={'flex justify-center items-center sm-hidden font-semibold ' + text} style={{ flex: 0.25 }}>
-        <p>{date} Days <Link href={`/job/${id}/job-update`}>update</Link></p>
-	<p><Link href={`job/${id}/job-details`}> details</Link></p>
+        <p>{date} Days</p>
       </div>
     </div>
   )

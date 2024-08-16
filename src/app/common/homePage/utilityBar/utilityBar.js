@@ -1,10 +1,10 @@
 import SearchBar from './searchBar/searchBar';
 import OptionMenu from './optionMenu/optionMenu';
 import { KeyBox, KeyBoxClearAll } from './keyBox/keyBox';
-
+import { SearchSvgX, ToolsSvg } from '../../svg';
 import globe from '../../../assets/img/green-globe.svg';
-import search from '../../../assets/img/search.svg';
-import industry from '../../../assets/img/industry.svg';
+// import search from '../../../assets/img/search.svg';
+// import industry from '../../../assets/img/industry.svg';
 
 const searchBarsuggestor = {
   id: 'role',
@@ -14,48 +14,51 @@ const searchBarsuggestor = {
     { oid: 'Writing', val: 'writing', oicon: globe },
     { oid: 'Marketing', val: 'marketing', oicon: globe },
   ],
-  icon: search,
+  Icon: <SearchSvgX />,
   formMode: true
 };
 
 const optionMenuSortBy = {
   id: 'sortBy',
-  title : 'Sort By',
-  options : [
-    {oid:'Latest'         , val:'latest'   , oicon: globe },
-    {oid:'Hottest'        , val:'hot'      , oicon: globe },
-    {oid:'Highest Paid'   , val:'high-pay'   , oicon: globe },
+  title: 'Sort By',
+  options: [
+    { oid: 'Role desc', val: 'role&desc', oicon: globe },
+    { oid: 'Role asc', val: 'role&asc', oicon: globe },
+    { oid: 'Company desc', val: 'company&desc', oicon: globe },
+    { oid: 'Company asc', val: 'company&asc', oicon: globe },
+    { oid: 'By Date desc', val: 'createdAt&desc', oicon: globe },
+    { oid: 'By Date asc', val: 'createdAt&asc', oicon: globe },
   ],
-  icon: industry,
+  Icon: <ToolsSvg />,
   formMode: false,
 }
 
 
-export default function UtilityBar({ query: 
-  { queryList, resultCount, clearSearch, clearOneCriteria } 
+export default function UtilityBar({ query:
+  { queryList, resultCount, clearSearch, clearOneCriteria }
 }) {
-  console.log(queryList, '23333333333333333/ query in utility bar')
+  console.log(queryList, ' query in utility bar')
   return (
     <>
-    <div className="mt-3 flex flex-col sm:flex-row">
-      {/* Search Bar*/}
-      <div className="ml-2 my-1 block relative sm:min-h-max w-64">
-        <SearchBar data={{ ...searchBarsuggestor }} />
+      <div className="mt-3 flex flex-col sm:flex-row">
+        {/* Search Bar*/}
+        <div className="ml-2 my-1 block relative sm:min-h-max w-64">
+          <SearchBar data={{ ...searchBarsuggestor }} />
+        </div>
+        <div className="ml-2 my-1 block relative sm:min-h-max w-64">
+          <OptionMenu data={{ ...optionMenuSortBy }} />
+        </div>
       </div>
-      <div className="ml-2 my-1 block relative sm:min-h-max w-64">
-	<OptionMenu data={{ ...optionMenuSortBy  }} />
-      </div>
-    </div>
       {/* search criteria show on UI*/}
       <div className='ml-2 my-1 block flex relative sm:min-h-max w-full'>
         {queryList.map(item => {
           return <KeyBox query={{ queryKey: item, clearOneCriteria }} />
         })}
-	{queryList.length > 0 && 
-	  <KeyBoxClearAll query={{ 
-	    queryKey: 'Clear All', resultCount: resultCount, clearSearch 
-	  }} /> 
-	}
+        {queryList.length > 0 &&
+          <KeyBoxClearAll query={{
+            queryKey: 'Clear All', resultCount: resultCount, clearSearch
+          }} />
+        }
       </div>
     </>
   )

@@ -7,7 +7,7 @@ const MENU_ITEMS = [
     { name: 'Login', href: '/login' },
     { name: "Register", href: '/register' },
     { name: 'User Account', href: '/user' },
-    // { name: 'add new Job', href: '/job/create-job' },
+    { name: 'add new Job', href: '/job/create-job' },
     // { name: 'update Job', href: '/job/fZSd1FfCajvOx5J3xcQV/job-update' },
     { name: 'job details', href: '/job/7377dj/job-details' },
 ]

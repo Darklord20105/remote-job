@@ -76,12 +76,13 @@ export async function updateJobPost(formData) {
   
   const processList = (name) => {
     let a = formData[name];
+    if (Array.isArray(a) ) return a;
     if (!a) return [];
     let b = a.split(' ');
     let result = []
     b.map(i => {
       i = i.replace(/[^A-Za-z]/g, '');
-      result.push(i);
+      i && result.push(i);
     });
     return result;
   };
@@ -101,7 +102,7 @@ export async function updateJobPost(formData) {
     tagList: processList('tagList'),
     priority: formData['priority'],
   };
-  console.log(rawFormData, ' before validation');
+  console.log(rawFormData, 'before validation');
   
   // validate data
   try {
@@ -120,13 +121,14 @@ export async function updateJobPost(formData) {
   // update in db
   const id = formData['id']
   rawFormData.createdAt = Timestamp.fromDate(new Date(rawFormData.createdAt))
+  
   console.log(rawFormData, 'before update');
   const myDocument = doc(db, 'jobList', id);
 
   try {
     const docRef =  await updateDoc(myDocument, rawFormData)
     // const docRef = await addDoc(myDocument, rawFormData);
-    console.log("Document updated with ID: ", docRef.id);
+    console.log("Document updated");
   } catch (error) {
     console.log("Error adding document: ", error);
   }
