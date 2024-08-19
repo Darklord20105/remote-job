@@ -5,16 +5,18 @@ import Header from './common/header.js';
 import Footer from './common/footer.js'
 import { cn } from './utils/cn.js';
 import { inter } from './fonts/fonts.js';
+import { getAuthenticatedAppForUser } from '../lib/firebase/serverApp'
 
 export const metadata = {
   title: 'Home',
   description: 'Welcome to Next.js',
 }
 
-function Layout({
+export async function Layout({
   children,
   className,
 }) {
+  const { currentUser } = await getAuthenticatedAppForUser();
   return (
     <html>
       <body className={`${inter.className} antialiased`}>
@@ -25,7 +27,7 @@ function Layout({
           )}
         >
           {/* <Gradient className="absolute bottom-0 left-1/2 top-0 ml-28 hidden w-1/2 lg:block" /> */}
-          <Header title={"remote in spain"} />
+          <Header initialUser={currentUser?.toJSON()}/>
           <main className="bg-gray-100 flex flex-shrink-0 flex-grow xl:flex ">
             {children}
           </main>

@@ -56,17 +56,17 @@ function LogoImage() {
   )
 }
 
-function Details({ props: { company, role, text } }) {
+function Details({ props: { company, position, text } }) {
   return (
     <div className={"flex flex-col justify-start " + text}>
-      <p className="font-bold text-[16px]">{role}</p>
+      <p className="font-bold text-[16px]">{position}</p>
       <p>{company}</p>
     </div>
   )
 }
 
 export default function FeedItem({
-  data: { id, company, role, createdAt, logo, location,
+  data: { id, company, position, createdAt, logo, location,
     salaryRangeMin, salaryRangeMax, verified, hot, jobType, tagList, priority }
 }) {
   // tag functionality
@@ -125,7 +125,7 @@ export default function FeedItem({
       {/* section 2 details with /location/ /salary/ /full or contract/ */}
       <div className='details ml-4' style={{ width: '30rem' }}>
         <Link href={`job/${id}/job-details`}>
-	  <Details props={{ company, role, text }} />
+	  <Details props={{ company, position, text }} />
 	</Link>
         <div className='detail-list flex gap-2 my-2'>
           <Info data={{ text: location, img: globe }} />

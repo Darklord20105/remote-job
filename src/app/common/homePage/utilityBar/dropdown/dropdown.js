@@ -122,7 +122,7 @@ export default function DropdownWrapper({ children }) {
 
 function MainDropdown(
   { data: { value, toggleDropdown, handleSearch,
-    objectProps: { id, title, formMode, Icon } } }
+    objectProps: { id, title, formMode, Icon, options } } }
 ) {
   return (
     <button type="button"
@@ -131,13 +131,13 @@ function MainDropdown(
 
         <span className={utilityBarClasses.dropDownItemContentImage}>{Icon}</span>
         {/* 
-	        formMode is a Boolean to show search bar input with suggestions 
-	        as drop down menu list,
-	        when you type something or select an option
-	        an action is triggered like fetching specific posts
-	      */}
+	  formMode is a Boolean to show search bar input with suggestions 
+	  as drop down menu list,
+	  when you type something or select an option
+	  an action is triggered like fetching specific posts
+	*/}
         {formMode ?
-          <SearchBarClassy handleSearch={handleSearch} />
+          <SearchBarClassy props={{options, handleSearch}} />
           : <span className={utilityBarClasses.dropDownTitleWrapper}>{value ? value : title}</span>}
       </span>
       <span className={utilityBarClasses.dropDownIcon}>
@@ -146,23 +146,38 @@ function MainDropdown(
     </button>)
 }
 
-export function SearchBarClassy({ handleSearch }) {
+export function SearchBarClassy({props : { options , handleSearch }}) {
   const searchParams = useSearchParams();
-  const [term, setTerm] = useState('')
+  const [term, setTerm] = useState('');
+  const [filteredOptions, setFilteredOptions] = useState(options);
+  //console.log(filteredOptions, 'mmmm');
+  
+  useEffect(() => {
+    console.log(term, 'mmmm');
+  }, [term]);
 
+  const handleChange = (event) => {
+    let value = event.target.value?.toLowerCase();
+    setTerm(value);
+
+    // Filter options based on input
+    const filtered = options.filter(option =>
+      option.val.toLowerCase().includes(value)
+    );
+    setFilteredOptions(filtered);
+  }
   return (
     <form onSubmit={(e) => {
-      e.preventDefault(); handleSearch(term);
+      e.preventDefault();
+      // handleSearch(term);
     }}>
       <input
         className={utilityBarClasses.dropDownSearchInput}
         placeholder='type here to search'
         id='search'
         name='search'
-        onChange={(e) => {
-          setTerm(e.target.value)
-        }}
-      // defaultValue={searchParams.get('filter')?.toString()}
+        onChange={handleChange}
+        defaultValue={term}
       />
     </form>
   );

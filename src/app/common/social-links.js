@@ -43,7 +43,7 @@ function SocialLinks() {
   return (
     <ul className={'flex items-center justify-center gap-4 my-4'}>
       {SOCIAL_LINKS.map((link) => (
-        <li class="text-gray-700 hover:text-orange-600" key={link.name}>
+        <li className="text-gray-700 hover:text-orange-600" key={link.name}>
           <a href={link.url}>
             <span className="sr-only">{link.name}</span>
             {link.svg}

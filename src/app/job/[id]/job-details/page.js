@@ -20,7 +20,7 @@ import {
   ReactJsSvg,
   NodeJsSvg,
   HtmlSvg,
-  CssSvg, 
+  CssSvg,
 } from "../../../common/svg"
 
 // note that we need search bar appear up in everyPage
@@ -70,63 +70,64 @@ export default function JobDetails() {
   };*/
 
   return (
-    <div class="bg-gray-100">
-      <div class="container mx-auto py-8">
-        <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+    <div className="bg-gray-100">
+      <div className="mx-auto py-8">
+      {/* <div className="container mx-auto py-8"> */}
+        <div className="grid grid-cols-4 md:grid-cols-12 gap-6 px-4">
 
-          <div class="col-span-4 sm:col-span-3">
+          <div className="col-span-4 md:col-span-3">
             <SideDetails />
           </div>
 
-          <div class="col-span-4 sm:col-span-9">
-            <div class="bg-white shadow rounded-lg p-6">
+          <div className="col-span-4 md:col-span-9">
+            <div className="bg-white shadow rounded-lg p-6">
               <Introduction />
               <AboutCompany />
 
-              <h3 class="font-semibold text-center mt-3 -mb-2">
+              <h3 className="font-semibold text-center mt-3 -mb-2">
                 Find us on
               </h3>
               <CompanySocialLinks />
 
 
-              <h2 class="text-xl font-bold mt-6 mb-4">Experience</h2>
-              <div class="mb-6">
-                <div class="flex justify-between flex-wrap gap-2 w-full">
-                  <span class="text-gray-700 font-bold">Web Developer</span>
+              <h2 className="text-xl font-bold mt-6 mb-4">Experience</h2>
+              <div className="mb-6">
+                <div className="flex justify-between flex-wrap gap-2 w-full">
+                  <span className="text-gray-700 font-bold">Web Developer</span>
                   <p>
-                    <span class="text-gray-700 mr-2">at ABC Company</span>
-                    <span class="text-gray-700">2017 - 2019</span>
+                    <span className="text-gray-700 mr-2">at ABC Company</span>
+                    <span className="text-gray-700">2017 - 2019</span>
                   </p>
                 </div>
-                <p class="mt-2">
+                <p className="mt-2">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae
                   tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas
                   suscipit.
                 </p>
               </div>
-              <div class="mb-6">
-                <div class="flex justify-between flex-wrap gap-2 w-full">
-                  <span class="text-gray-700 font-bold">Web Developer</span>
+              <div className="mb-6">
+                <div className="flex justify-between flex-wrap gap-2 w-full">
+                  <span className="text-gray-700 font-bold">Web Developer</span>
                   <p>
-                    <span class="text-gray-700 mr-2">at ABC Company</span>
-                    <span class="text-gray-700">2017 - 2019</span>
+                    <span className="text-gray-700 mr-2">at ABC Company</span>
+                    <span className="text-gray-700">2017 - 2019</span>
                   </p>
                 </div>
-                <p class="mt-2">
+                <p className="mt-2">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae
                   tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas
                   suscipit.
                 </p>
               </div>
-              <div class="mb-6">
-                <div class="flex justify-between flex-wrap gap-2 w-full">
-                  <span class="text-gray-700 font-bold">Web Developer</span>
+              <div className="mb-6">
+                <div className="flex justify-between flex-wrap gap-2 w-full">
+                  <span className="text-gray-700 font-bold">Web Developer</span>
                   <p>
-                    <span class="text-gray-700 mr-2">at ABC Company</span>
-                    <span class="text-gray-700">2017 - 2019</span>
+                    <span className="text-gray-700 mr-2">at ABC Company</span>
+                    <span className="text-gray-700">2017 - 2019</span>
                   </p>
                 </div>
-                <p class="mt-2">
+                <p className="mt-2">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae
                   tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas
                   suscipit.
@@ -143,47 +144,47 @@ export default function JobDetails() {
 
 function SideDetails() {
   const skills = [
-    { name:'React', icon: <ReactJsSvg />},
-    { name:'Node js', icon: <NodeJsSvg />},
-    { name:'HTML 5', icon: <HtmlSvg />},
-    { name:'CSS3', icon: <CssSvg />},
+    { name: 'React', icon: <ReactJsSvg /> },
+    { name: 'Node js', icon: <NodeJsSvg /> },
+    { name: 'HTML 5', icon: <HtmlSvg /> },
+    { name: 'CSS3', icon: <CssSvg /> },
     //{ name:'tailwindcss', icon: < />},
   ]
   // const salary = `$${salaryRangeMin}k - $${salaryRangeMax}k`  
   return (
-    <div class="bg-white shadow rounded-lg p-6">
-      <div class="flex flex-col items-center">
+    <div className="bg-white shadow rounded-lg p-6">
+      <div className="flex flex-col items-center">
         <div className='w-20 h-20 flex' >
-          <Image priority src={logo} class="bg-gray-300 rounded-full mb-4 w-full h-full shrink-0" alt='company logo' />
+          <Image priority src={logo} className="bg-gray-300 rounded-full mb-4 w-full h-full shrink-0" alt='company logo' />
         </div>
-        <h1 class="text-xl font-bold">{'Mercedes'}</h1>
-        <p class="text-gray-700 text-center">{'Senio Java Dev'}</p>
-        <div class="mt-6 flex flex-wrap gap-4 justify-center">
-          <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Apply</a>
-          <a href="#" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">website</a>
+        <h1 className="text-xl font-bold">{'Mercedes'}</h1>
+        <p className="text-gray-700 text-center">{'Senio Java Dev'}</p>
+        <div className="mt-6 flex flex-wrap gap-4 justify-center">
+          <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Apply</a>
+          <a href="#" className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">website</a>
         </div>
       </div>
-      <hr class="my-6 border-t border-gray-300" />
+      <hr className="my-6 border-t border-gray-300" />
 
-      <div class="flex flex-col items-center text-center text-sm">
-	<div class='mb-2 flex items-center'>
-	  <div className='w-6 h-6 mr-2' >
-              <EyeViewsSvg />
-	   </div>
+      <div className="flex flex-col items-center text-center text-sm">
+        <div className='mb-2 flex items-center'>
+          <div className='w-6 h-6 mr-2' >
+            <EyeViewsSvg />
+          </div>
           <p>2456 views </p>
         </div>
-	<p> 654 applied </p>
-	<a href='#'>Share this job</a>
+        <p> 654 applied </p>
+        <a href='#'>Share this job</a>
       </div>
 
-      <hr  class="my-6 border-t border-gray-300" />	  
-      <div class="flex flex-col">
-        <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">HighLights</span>
+      <hr className="my-6 border-t border-gray-300" />
+      <div className="flex flex-col">
+        <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">HighLights</span>
         <ul>
-	  <li class='mb-2 flex items-center'>
-	    <div className='w-6 h-6  mr-2' >
-	      <Image
-	        priority
+          <li className='mb-2 flex items-center'>
+            <div className='w-6 h-6  mr-2' >
+              <Image
+                priority
                 src={globe}
                 width='100%'
                 height='100%'
@@ -191,34 +192,34 @@ function SideDetails() {
               />
             </div>
             <p>worldwide</p>
-	  </li>
-	  <li class='mb-2 flex items-center'>                                                 
-	    <div className='w-6 h-6 flex mr-2' >
-	      <MoneyBagSvg />
-	    </div>
-	    <p>{'$25k - $75k'}</p>
-	  </li>
-	  <li class='mb-2 flex items-center'>                                                 
-	    <div className='w-6 h-6 flex mr-2' >
-	      <TemporarySvg />
-            </div>                                                                            
-	    <p>{'full time'}</p>
-	  </li>
-	</ul>
-	<span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Skills</span>
-	<ul>
+          </li>
+          <li className='mb-2 flex items-center'>
+            <div className='w-6 h-6 flex mr-2' >
+              <MoneyBagSvg />
+            </div>
+            <p>{'$25k - $75k'}</p>
+          </li>
+          <li className='mb-2 flex items-center'>
+            <div className='w-6 h-6 flex mr-2' >
+              <TemporarySvg />
+            </div>
+            <p>{'full time'}</p>
+          </li>
+        </ul>
+        <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">Skills</span>
+        <ul>
           {
             skills.map(item => {
               return (
-		<li key={item + 'hfd'} class="mb-2 flex items-center">
-		  <div className='w-6 h-6 flex mr-2' >
-		      {item.icon}
+                <li key={item + 'hfd'} className="mb-2 flex items-center">
+                  <div className='w-6 h-6 flex mr-2' >
+                    {item.icon}
                   </div>
                   <p>{item.name}</p>
-		</li>)
-	      ;
+                </li>)
+                ;
             })
-	  }
+          }
         </ul>
       </div>
     </div>
@@ -234,8 +235,8 @@ function MainDescription() {
 function Introduction() {
   return (
     <>
-      <h2 class="text-2xl font-light  mt-6">{'Mercedes'} is Hiring :</h2>
-      <h1 class="text-4xl font-bold mb-4">{'Senior Java Dev'}</h1>
+      <h2 className="text-2xl font-light  mt-6">{'Mercedes'} is Hiring :</h2>
+      <h1 className="text-4xl font-bold mb-4">{'Senior Java Dev'}</h1>
     </>
   )
 }
@@ -243,8 +244,8 @@ function Introduction() {
 function AboutCompany() {
   return (
     <>
-      <h3 class="text-l font-bold mb-4">About Our Company</h3>
-      <p class="text-gray-700">
+      <h3 className="text-l font-bold mb-4">About Our Company</h3>
+      <p className="text-gray-700">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper,
         ut vestibulum velit convallis. Aenean posuere risus non velit egestas
         suscipit. Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis in faucibus orci luctus
@@ -266,9 +267,9 @@ const loadSocialLinks = [
 
 function CompanySocialLinks() {
   return (
-    <div class="flex justify-center items-center gap-6 my-6">
+    <div className="flex justify-center items-center gap-6 my-6">
       {loadSocialLinks.map(item => (
-        <Link key={item.url} class="text-gray-700 hover:text-orange-600" href={item.url} target="_blank">
+        <Link key={item.url} className="text-gray-700 hover:text-orange-600" href={item.url} target="_blank">
           {item.svg}
         </Link>
       ))}

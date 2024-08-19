@@ -26,11 +26,13 @@ export async function createJobPost(formData) {
   };
   const rawFormData = {
     company: formData['company'],
-    role: formData['role'],
-    createdAt: formData['createdAt'],
+    position: formData['position'],
+    createdAt: Date.now(),
     // logo: ,
     jobClass: formData['jobClass'],
     location: formData['location'],
+    website: formData['website'],
+    applyUrl: formData['applyUrl'],
     salaryRangeMin: formData['salaryRangeMin'],
     salaryRangeMax: formData['salaryRangeMax'],
     verified: formData['verified'],
@@ -89,11 +91,12 @@ export async function updateJobPost(formData) {
 
   const rawFormData = {
     company: formData['company'],
-    role: formData['role'],
-    createdAt: formData['createdAt'],
+    position: formData['position'],
     // logo: ,
     jobClass: formData['jobClass'],
     location: formData['location'],
+    website: formData['website'],
+    applyUrl: formData['applyUrl'],
     salaryRangeMin: formData['salaryRangeMin'],
     salaryRangeMax: formData['salaryRangeMax'],
     verified: formData['verified'],
@@ -120,7 +123,7 @@ export async function updateJobPost(formData) {
   }
   // update in db
   const id = formData['id']
-  rawFormData.createdAt = Timestamp.fromDate(new Date(rawFormData.createdAt))
+  // rawFormData.createdAt = Timestamp.fromDate(new Date(rawFormData.createdAt))
   
   console.log(rawFormData, 'before update');
   const myDocument = doc(db, 'jobList', id);

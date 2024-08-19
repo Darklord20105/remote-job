@@ -1,4 +1,4 @@
-import SearchBar from './searchBar/searchBar';
+import SearchDropDownWrapper from './searchBar/searchSimple';
 import OptionMenu from './optionMenu/optionMenu';
 import { KeyBox, KeyBoxClearAll } from './keyBox/keyBox';
 import { SearchSvgX, ToolsSvg } from '../../svg';
@@ -7,12 +7,13 @@ import globe from '../../../assets/img/green-globe.svg';
 // import industry from '../../../assets/img/industry.svg';
 
 const searchBarsuggestor = {
-  id: 'role',
-  title: 'Search',
+  id: 'search',
+  placeholder: 'type here to search',
   options: [
     { oid: 'car', val: 'car', oicon: globe },
-    { oid: 'Writing', val: 'writing', oicon: globe },
-    { oid: 'Marketing', val: 'marketing', oicon: globe },
+    { oid: 'test', val: 'test', oicon: globe },
+    { oid: 'driver', val: 'driver', oicon: globe },
+    { oid: 'lord', val: 'lord', oicon: globe },
   ],
   Icon: <SearchSvgX />,
   formMode: true
@@ -22,8 +23,8 @@ const optionMenuSortBy = {
   id: 'sortBy',
   title: 'Sort By',
   options: [
-    { oid: 'Role desc', val: 'role&desc', oicon: globe },
-    { oid: 'Role asc', val: 'role&asc', oicon: globe },
+    { oid: 'Role desc', val: 'position&desc', oicon: globe },
+    { oid: 'Role asc', val: 'position&asc', oicon: globe },
     { oid: 'Company desc', val: 'company&desc', oicon: globe },
     { oid: 'Company asc', val: 'company&asc', oicon: globe },
     { oid: 'By Date desc', val: 'createdAt&desc', oicon: globe },
@@ -43,7 +44,7 @@ export default function UtilityBar({ query:
       <div className="mt-3 flex flex-col sm:flex-row">
         {/* Search Bar*/}
         <div className="ml-2 my-1 block relative sm:min-h-max w-64">
-          <SearchBar data={{ ...searchBarsuggestor }} />
+          <SearchDropDownWrapper data={{ ...searchBarsuggestor }} />
         </div>
         <div className="ml-2 my-1 block relative sm:min-h-max w-64">
           <OptionMenu data={{ ...optionMenuSortBy }} />
@@ -52,7 +53,7 @@ export default function UtilityBar({ query:
       {/* search criteria show on UI*/}
       <div className='ml-2 my-1 block flex relative sm:min-h-max w-full'>
         {queryList.map(item => {
-          return <KeyBox query={{ queryKey: item, clearOneCriteria }} />
+          return <KeyBox key={item} query={{ queryKey: item, clearOneCriteria }} />
         })}
         {queryList.length > 0 &&
           <KeyBoxClearAll query={{

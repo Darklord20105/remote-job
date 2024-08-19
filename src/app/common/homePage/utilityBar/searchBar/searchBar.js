@@ -21,7 +21,7 @@ function SearchInput({ data: { id, title, options, Icon, formMode } }) {
   // this hook is used to send props up to parent dropdown wrapper
 
   useEffect(() => {
-    setObjectProps({ id, title, formMode, Icon });
+    setObjectProps({ id, title, formMode, Icon, options });
   }, []);
 
   if (!isOpen) { return null }

@@ -2,9 +2,11 @@ import * as yup from 'yup';
 
 export const JobSchema = yup.object().shape({
   company: yup.string().required(),
-  role: yup.string().required(),
+  position: yup.string().required(),
   jobClass: yup.string().required(),
   location: yup.string().required(),
+  website: yup.string().url().required(),
+  applyUrl: yup.string().url().required(),
   jobType: yup.string().required(),
   priority: yup.string().required().default('normal'),
   // date validator
@@ -34,7 +36,7 @@ export const JobSchema = yup.object().shape({
     )
     .min(1, "must add at least one tag")
     .required("tag cannot be empty")
-    .test('custom-test', 'first tag must be 3 characters or more',
+    .test('custom-test', 'tags must be 3 characters or more',
       function (value) {
         if (value && value.length > 0 && value[0].length < 3) {
           return this.createError({

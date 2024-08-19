@@ -1,28 +1,4 @@
-### NextJS ###
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+node_modules
+.next
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-.next/
-.firebase/
-node_modules/
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# local env files
-.env*.local
-.hh
+.env

@@ -210,5 +210,21 @@ function clearOneCriteria(id) {
   replace(`${pathname}?${params.toString()}`);
 }
 
+-------
+
+
+to make service worker run on android chrome , go to
+chrome://serviceworker-internals/
+and check the option 
+Open DevTools window and pause JavaScript execution on Service Worker startup for debugging.
+
+and go to
+chrome://flags/
+
+look for option: 
+Insecure origins treated as secure
+add this
+http://localhost:3000
+then enable this option
 
 

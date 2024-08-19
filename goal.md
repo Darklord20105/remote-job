@@ -8,9 +8,9 @@ functionality filter and sort
 - search criteria can be stacked but no duplicate... ok
 - fix search bar, dropdown  and remove un-neccessary imports ... ok
 
-# has sort dropdown only on the same level as search .. Pending
-- sort has couple of options
-- when you click on an option trigger sort criteria to re-arrange items as requested
+# has sort dropdown only on the same level as search .. 100%
+- sort has couple of options  ... ok
+- when you click on an option trigger sort criteria to re-arrange items as requested ... ok
 
 2 - criteria bar
 # clear Bar .. 100%
@@ -18,4 +18,5 @@ functionality filter and sort
 - multiplie criteria box is available ... ok
 - global clear search box contains number of matched results (number of elements that match filter and sort criteria) ... ok
 
-
+next goals
+https://github.com/firebase/friendlyeats-web/tree/master/nextjs-end

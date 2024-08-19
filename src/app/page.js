@@ -8,7 +8,7 @@ export default function HomePage() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const [resultCount, setResultCount] = useState(0)
+  const [ resultCount, setResultCount ] = useState(0);
 
   const params = new URLSearchParams(searchParams);
   // filter from url
@@ -18,7 +18,7 @@ export default function HomePage() {
   // console.log(queryCriteriaList, 'query list, value in home page from url')
 
   function preventDuplicateFilter(arr) {
-    let a = new Set(arr)
+    let a = new Set(arr);
     return [...a]
   }
   let queryList = preventDuplicateFilter(queryCriteriaList);
@@ -31,8 +31,8 @@ export default function HomePage() {
     sortKey = filterSort && filterSort.split('&')[0];
     sortDirection = filterSort.split('&')[1];
   } else {
-    sortKey = "company"
-    sortDirection = "asc";
+    sortKey = "company";
+    sortDirection = "desc";
   }
 
   // alert(JSON.stringify(sortKey))
@@ -43,11 +43,11 @@ export default function HomePage() {
   }
 
   function clearOneCriteria(id) {
-    console.log("clear criteria " + id)
+    console.log("clear criteria " + id);
     let newFilter = params.getAll("filter").join(" ").split(" ").filter(item => item !== id);
     params.delete('filter');
-    let m = newFilter.join(" ")
-    console.log(m, "new filter")
+    let m = newFilter.join(" ");
+    console.log(m, "new filter");
     if (newFilter.length > 0) {
       params.append('filter', m);
     }
@@ -55,7 +55,7 @@ export default function HomePage() {
     replace(`${pathname}?${params.toString()}`);
   };
   function collectResultCount(count) {
-    setResultCount(count)
+    setResultCount(count);
   }
 
   return (

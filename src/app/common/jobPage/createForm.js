@@ -15,9 +15,11 @@ const cm = {
 
 const fields = [
   { id: 'company',  type: 'text', label: 'Company', placeholder: "Add company name" },
-  { id: 'role',  type: 'text', label: 'Role', placeholder: "Describe the role", },
+  { id: 'position',  type: 'text', label: 'Position', placeholder: "Describe the role", },
   { id: 'jobClass',  type: 'text', label: 'Job industry', placeholder: "Add company name" },
   { id: 'location',  type: 'text', label: 'Location', placeholder: "Job location" },
+  { id: 'website',  type: 'text', label: 'Company Website', placeholder: "Company location" },
+  { id: 'applyUrl',  type: 'text', label: 'Apply Url', placeholder: "Where to apply for the position" },
   { id: 'salaryRangeMin',  type: 'number', label: 'Minimum salary', placeholder: 0 },
   { id: 'salaryRangeMax',  type: 'number', label: 'Maximum salary', placeholder: 0 },
   { id: 'jobType',  type: 'text', label: 'Job Type', placeholder: "Job type> full time, contract, etc ...." },
@@ -39,10 +41,11 @@ export default function CreateForm() {
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     company: '',
-    role: '',
-    createdAt: Date.now(),
+    position: '',
     jobClass: '',
     location: '',
+    website: '',
+    applyUrl: '',
     salaryRangeMin: 0,
     salaryRangeMax: 0,
     jobType: '',

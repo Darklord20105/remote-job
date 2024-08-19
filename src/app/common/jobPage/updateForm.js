@@ -18,9 +18,11 @@ const cm = {
 
 const fields = [
   { id: 'company', type: 'text', label: 'Company', placeholder: "Add company name" },
-  { id: 'role', type: 'text', label: 'Role', placeholder: "Describe the role", },
+  { id: 'position', type: 'text', label: 'Position', placeholder: "Describe the role", },
   { id: 'jobClass', type: 'text', label: 'Job industry', placeholder: "Add company name" },
   { id: 'location', type: 'text', label: 'Location', placeholder: "Job location" },
+  { id: 'website',  type: 'text', label: 'Company Website', placeholder: "Company location" },
+  { id: 'applyUrl',  type: 'text', label: 'Apply Url', placeholder: "Where to apply for the position" },
   { id: 'salaryRangeMin', type: 'number', label: 'Minimum salary', placeholder: 0 },
   { id: 'salaryRangeMax', type: 'number', label: 'Maximum salary', placeholder: 0 },
   { id: 'jobType', type: 'text', label: 'Job Type', placeholder: "Job type> full time, contract, etc ...." },
@@ -39,15 +41,17 @@ const radioGroupFields = [
 ]
 
 export default function UpdateForm() {
-  const [errors, setErrors] = useState({});
+  const [ errors, setErrors ] = useState({});
   const { id } = useParams();
   const { data, error, loading } = useFetchData(fetchJobById, id);
-  const [formData, setFormData] = useState({
+  const [ formData, setFormData ] = useState({
     company: '',
-    role: '',
+    position: '',
     createdAt: {},
     jobClass: '',
     location: '',
+    website: '',                                                               
+    applyUrl: '',
     salaryMin: '',
     salaryMax: '',
     jobType: '',
@@ -74,7 +78,7 @@ export default function UpdateForm() {
     event.preventDefault();
     console.log('submit');
     let dataOut = formData;
-    dataOut.createdAt = dataOut.createdAt.toDate();
+    /*dataOut.createdAt = dataOut.createdAt.toDate();*/
     dataOut.id = id;
     console.log(dataOut, "data out")
     try {

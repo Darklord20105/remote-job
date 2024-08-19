@@ -1,6 +1,7 @@
 import { db } from "./clientApp";
 import { collection, getDocs, getDoc, query, doc, where } from 'firebase/firestore/lite';
 
+// will move these to utils file
 function customFilter(arr, term) {
   var matches = [];
   if (!Array.isArray(arr)) return matches;
@@ -46,10 +47,12 @@ export async function fetchFilteredJobList(queryList) {
     let snapshot = await getDocs(filter);
     let results = [];
 
+    console.log(snapshot)
     snapshot.docs.map(doc => {
-      results.push({ id: doc.id, ...doc.data() })
-    });    
-    
+      results.push({ id: doc.id, ...doc.data(), createdAt: doc['_document'].createTime.timestamp })
+    });
+
+    console.log(results)
     if (queryList.length > 1) {
       return gFilter(results, queryList);
     }
