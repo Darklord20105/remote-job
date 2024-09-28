@@ -1,71 +1,31 @@
 'use client'
 import Link from 'next/link'
-import { SiteLogo } from '../common/svg';
-import { signInWithGoogle } from '../../lib/firebase/auth'
-
-// export function Register() {
-//     return (<div className="flex flex-col items-center justify-center px-6 pt-8 mx-auto md:h-screen pt:mt-0 dark:bg-gray-900">
-//         <Link href="/" className="flex items-center justify-center mb-6 text-2xl font-semibold lg:mb-10 dark:text-white">
-//             <SiteLogo className="mr-4 h-11" />
-//             <span>Remote Spain</span>
-//         </Link>
-//         {/*<!-- Card -->*/}
-//         <div className="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-gray-800">
-//             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-//                 Create a Free Account
-//             </h2>
-//             <form className="mt-8 space-y-6" action="#">
-//                 <div>
-//                     <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-//                     <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="name@company.com" required />
-//                 </div>
-//                 <div>
-//                     <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-//                     <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required />
-//                 </div>
-//                 <div>
-//                     <label for="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-//                     <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required />
-//                 </div>
-//                 <div className="flex items-start">
-//                     <div className="flex items-center h-5">
-//                         <input id="remember" aria-describedby="remember" name="remember" type="checkbox" className="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600" required />
-//                     </div>
-//                     <div className="ml-3 text-sm">
-//                         <label for="remember" className="font-medium text-gray-900 dark:text-white">I accept the <a href="#" className="text-primary-700 hover:underline dark:text-primary-500">Terms and Conditions</a></label>
-//                     </div>
-//                 </div>
-//                 <button type="submit" className="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-400 rounded-lg hover:bg-primary-500 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create account</button>
-//                 <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
-//                     Already have an account? <Link href="/login" className="text-primary-700 hover:underline dark:text-primary-500">Login here</Link>
-//                 </div>
-//             </form>
-//         </div>
-//     </div>
-//     );
-// };
+import { SiteLogo } from '../../common/svg';
+import { signInWithGoogle } from '../../../lib/firebase/auth'
 
 export default function Register() {
     const handleGoogleAuth = async () => {
-	let m = await signInWithGoogle();
-	console.log(m)
+        let m = await signInWithGoogle();
+        console.log(m)
     }
     return (
-        <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col justify-center items-center">
-            <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+        <div className="min-h-screen bg-gray-100 text-gray-900">
+            <div className="m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+                {/* section 1 form start*/}
                 <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-                    <div>
-                        <img src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png"
-                            className="w-32 mx-auto" />
+                    <div className='flex justify-center items-center'>
+                        <SiteLogo />
+                        <h1 className='ml-2 text-2xl xl:text-3xl font-extrabold'>Remote Spain</h1>
                     </div>
                     <div className="mt-12 flex flex-col items-center">
                         <h1 className="text-2xl xl:text-3xl font-extrabold">
                             Sign up
                         </h1>
                         <div className="w-full flex-1 mt-8">
+                            {/* social sign in end */}
                             <div className="flex flex-col items-center">
                                 <button
-	    			    onClick={handleGoogleAuth}
+                                    onClick={handleGoogleAuth}
                                     className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                                     <div className="bg-white p-2 rounded-full">
                                         <svg className="w-4" viewBox="0 0 533.5 544.3">
@@ -101,11 +61,12 @@ export default function Register() {
                                     </span>
                                 </button>
                             </div>
-
+                            {/* social sign in end */}
+                            {/* email sign in start */}
                             <div className="my-12 border-b text-center">
                                 <div
                                     className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
-                                    Or sign up with e-mail
+                                    Or Create an account with e-mail
                                 </div>
                             </div>
 
@@ -129,22 +90,20 @@ export default function Register() {
                                     </span>
                                 </button>
                                 <p className="mt-6 text-xs text-gray-600 text-center">
-                                    I agree to abide by templatana's
-                                    <a href="#" className="border-b border-gray-500 border-dotted">
-                                        Terms of Service
-                                    </a>
-                                    and its
-                                    <a href="#" className="border-b border-gray-500 border-dotted">
-                                        Privacy Policy
-                                    </a>
+                                    Already has an account{" "}
+                                    <Link href="/login" className="border-b border-gray-500 border-dotted">
+                                        Login Here
+                                    </Link>
                                 </p>
                             </div>
+                            {/* email sign in end */}
                         </div>
                     </div>
                 </div>
+                {/* section 1 form end */}
                 <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
                     <div className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
-                        style={{backgroundImage: "url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg')"}}>
+                        style={{ backgroundImage: "url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg')" }}>
                     </div>
                 </div>
             </div>

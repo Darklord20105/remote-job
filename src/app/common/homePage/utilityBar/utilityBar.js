@@ -1,10 +1,8 @@
 import SearchDropDownWrapper from './searchBar/searchSimple';
 import OptionMenu from './optionMenu/optionMenu';
-import { KeyBox, KeyBoxClearAll } from './keyBox/keyBox';
+import { KeyBox, KeyBoxClearAll, KeyBoxGoBack } from './keyBox/keyBox';
 import { SearchSvgX, ToolsSvg } from '../../svg';
 import globe from '../../../assets/img/green-globe.svg';
-// import search from '../../../assets/img/search.svg';
-// import industry from '../../../assets/img/industry.svg';
 
 const searchBarsuggestor = {
   id: 'search',
@@ -36,8 +34,9 @@ const optionMenuSortBy = {
 
 
 export default function UtilityBar({ query:
-  { queryList, resultCount, clearSearch, clearOneCriteria }
+  { queryList, resultCount, clearSearch, clearOneCriteria, pathname }
 }) {
+  const showBackButton = ['job-details', 'sort', 'filter']
   console.log(queryList, ' query in utility bar')
   return (
     <>
@@ -52,6 +51,7 @@ export default function UtilityBar({ query:
       </div>
       {/* search criteria show on UI*/}
       <div className='ml-2 my-1 block flex relative sm:min-h-max w-full'>
+	  {showBackButton.some(el => pathname.includes(el) )  ? <KeyBoxGoBack /> : null}
         {queryList.map(item => {
           return <KeyBox key={item} query={{ queryKey: item, clearOneCriteria }} />
         })}

@@ -1,15 +1,16 @@
 import Image from 'next/image';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link'
+import { useSearchFilter } from '../../hooks/useSearchFilter';
 import globe from '../../../assets/img/green-globe.svg'
 import money from '../../../assets/img/money-bag.svg'
 import temp from '../../../assets/img/temp.svg';
-import logo from '../../../assets/img/logo.jpeg';
-import { calculateDayDifference } from '../../../utils/helper';
+// import logo from '../../../assets/img/logo.jpeg';
+import { formatTimestampToDate, timeAgo } from '../../../utils/helper';
 
 function Info({ data: { text, img } }) {
   return (
-    <div className="border-grey rounded-[0.5em] text-black bg-white text-[12px] px-[0.5em] py-[0.05em] cursor-pointer flex justify-center items-center gap-1 border-solid border-slate-300 border">
+    <div className="border-grey rounded-[0.5em] text-black bg-white text-[10px] px-[0.5em] py-[0.05em] cursor-pointer flex justify-center items-center gap-1 border-solid border-slate-300 border">
       {img && <div className='w-3 h-3 flex' >
         <Image
           priority
@@ -26,8 +27,8 @@ function Info({ data: { text, img } }) {
 
 function Tag({ data: { text, handleSearch } }) {
   return (
-    <div className="border-grey rounded-[0.5em] text-black bg-white text-[12px] px-[0.5em] py-[0.05em] cursor-pointer flex justify-center items-center gap-1 border-solid border-slate-300 border" onClick={() => handleSearch(text)}>
-      <p>{text}</p>
+    <div className="h-6 border-grey rounded-[0.5em] text-black bg-white text-[12px] font-bold px-[0.5em] py-[0.05em] cursor-pointer flex justify-center items-center gap-1 border-solid border-slate-500 border-2" onClick={() => handleSearch(text)}>
+      <h3>{text}</h3>
     </div>
   )
 }
@@ -45,103 +46,84 @@ function priorityHandler(priority) {
   }
 }
 
-function RenderTextLogo({ props: { company } }) {
+function RenderTextLogo({ company }) {
   const text = company.split(" ").map(letter => letter[0]).join('').slice(0, 2).toUpperCase();
-  return (<div className='rounded-full bg-white w-full h-full text-black flex justify-center items-center text-3xl font-bold border'>{text}</div>)
+  return (<div className='rounded-full bg-white w-16 h-16 text-black flex justify-center items-center text-3xl font-bold border'>{text}</div>)
 }
 
-function LogoImage() {
+function LogoImage({logo}) {
   return (
-    <Image priority src={logo} width='100%' alt='logo' className='rounded-full border' />
+    <Image priority width={64} height={64} src={logo} alt='logo' style={{maxWidth:"none"}} className='rounded-full border h-16' placeholder='empty'/>
   )
 }
 
-function Details({ props: { company, position, text } }) {
+/// was 20, 16, 24 
+function Details({ props: { company, position, verified } }) {
   return (
-    <div className={"flex flex-col justify-start " + text}>
-      <p className="font-bold text-[16px]">{position}</p>
-      <p>{company}</p>
+    <div className={"flex flex-col justify-start text-black"}>
+      <p className="font-bold text-[16px] overflow-hidden">{position}
+	  {verified && <span className='bg-lime-300 text-white text-[12.8px] px-2 py-1 ml-3 rounded-lg'>VERIFIED</span>}
+      </p>
+      <p className="font-light text-[19.2px]">{company}</p>
     </div>
   )
 }
 
 export default function FeedItem({
   data: { id, company, position, createdAt, logo, location,
-    salaryRangeMin, salaryRangeMax, verified, hot, jobType, tagList, priority }
+    salaryRangeMin, salaryRangeMax, jobType, tagList, bgColorName, 
+    bgColorToggle, verified, hot, priority, expand = false }
 }) {
-  // tag functionality
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
 
-  const handleSearch = (term) => {
-    // Basically this updates url params to  be recieved on home page and search
-    const params = new URLSearchParams(searchParams);
-    function preventDuplicateFilter(arr) {
-      let a = new Set(arr)
-      return [...a]
-    }
-    // get previous term
-    let previousTerm = params.getAll('filter') || [];
-    
-    // if we have a previous item we need to merge our new term
-    // first we need to delete our old filter and make new merged one
-    // it was quite hard to do this 
-    // PLEASE DON'T CHANGE UNLESS YOU KNOW WHAT TO DO !!!
-    if (previousTerm.length > 0) {
-      // if we have already a param in url delete it
-      params.delete('filter')
-      console.log(previousTerm, "before push new param")
- 
-      let a = previousTerm.join("").split(" ");
-      console.log("try to fix before", a)
-      a.push(term);
-      let b = preventDuplicateFilter(a)
-      console.log("try fixing stage 2", b)
-
-      let newTerm = b.join(' ');
-      params.append('filter', newTerm)
-    } else {
-      params.append('filter', term);
-    }
-
-    // console.log(params);
-    replace(`${pathname}?${params.toString()}`);
-  }
+  const { handleSearch } = useSearchFilter();
 
   // customizations
-  const tags = tagList.slice(0, 3)
-  let date = calculateDayDifference(createdAt.toDate());
+  const tags = expand ? tagList : tagList.slice(0, 3)
+  const formattedDate = formatTimestampToDate(createdAt);
+  const timeAgoPeriod = timeAgo(formattedDate);
+  const date = timeAgoPeriod.substring(0, timeAgoPeriod.length - 4);
+
   let styling = priorityHandler(priority);
-  const { bg, text } = styling;
-  const salary = `$${salaryRangeMin}k - $${salaryRangeMax}k`
+  // const { bg, text } = styling;
+  const salary = `$${salaryRangeMin/1000}k - $${salaryRangeMax/1000}k`
 
   return (
-    <div className={'flex m-2 p-2 text-gray-300 gap-1 rounded-lg border-solid border-slate-500 border relative ' + bg}>
+    <div 
+      className='flex m-1 p-2 text-gray-300 gap-1 rounded-lg border-solid border-slate-500 border relative'
+      style={
+        expand ?                                                                                                    
+	  { borderBottom:'none',
+            borderRadius: '8px 8px 0px 0px',
+            backgroundColor: bgColorName
+          } :  { backgroundColor: bgColorName }
+      }
+    >
       {/* section 1 logo alone */}
-      <div className="logo-image flex justify-center items-center sm-hidden" style={{ width: '5rem', height: '5rem' }}>
-        {logo ? <LogoImage /> : <RenderTextLogo props={{ company }} />}
+      <div className="logo-image flex justify-center items-center sm-hidden" style={{width:'4rem'}}>
+        {logo ? <LogoImage logo={logo}/> : <RenderTextLogo company={company} />}
       </div>
       {/* section 2 details with /location/ /salary/ /full or contract/ */}
-      <div className='details ml-4' style={{ width: '30rem' }}>
-        <Link href={`job/${id}/job-details`}>
-	  <Details props={{ company, position, text }} />
+      <div className='details mx-4 min-w-80 flex flex-col justify-center'>
+        <Link href={!expand ? `job-details/${id}/` : '#'}>
+	  <Details props={{ company, position, verified }} />
 	</Link>
-        <div className='detail-list flex gap-2 my-2'>
+        <div className='detail-list flex gap-1 my-1'>
           <Info data={{ text: location, img: globe }} />
           <Info data={{ text: salary, img: money }} />
-          {jobType && <Info data={{ text: 'contractor', img: temp }} />}
+          <Info data={{ text: jobType, img: temp }} />
         </div>
       </div>
       {/* section 3 tags */}
-
-      <div className='tag-list flex items-center justify-start gap-4 ksm-hidden ' style={{ flex: 1 }}>
+      <div 
+	className='tag-list w-full flex-wrap flex items-center content-center  gap-2 sm-hidden ' 
+	style={ expand ? {flexWrap:'wrap', padding: '0 5rem'}: {} }	
+      >
         {tags.map(i => {
           return <Tag key={i} data={{ text: i, handleSearch }} />
         })}
       </div>
-      <div className={'flex justify-center items-center sm-hidden font-semibold ' + text} style={{ flex: 0.25 }}>
-        <p>{date} Days</p>
+      <div className={'flex w-40 ml-auto justify-center text-black items-center sm-hidden font-semibold'}>
+        <p>{date}</p>
       </div>
     </div>
   )

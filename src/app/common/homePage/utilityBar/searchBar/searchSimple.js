@@ -2,16 +2,17 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { utilityBarClasses } from '../../../../constants/classes';
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { DropdownSvg, CheckedSvg } from '../../../svg';
+import { useSearchFilter } from '../../../hooks/useSearchFilter';
 
 export default function SearchDropDownWrapper({ data }) {
     // since this is a Form like component we need to capture search strring so we need these
     const { options } = data;
+    const { handleSearch } = useSearchFilter();
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredOptions, setFilteredOptions] = useState(options);
-    const [ error, setError] = useState(null);
-    
+    const [error, setError] = useState(null);
+
     useEffect(() => {
         console.log(searchTerm, 'mmmm');
     }, [searchTerm]);
@@ -25,46 +26,6 @@ export default function SearchDropDownWrapper({ data }) {
             option.val.toLowerCase().includes(value)
         );
         setFilteredOptions(filtered);
-    }
-    // to send data tp url as params we need these
-    // new handle search with url params
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
-    const { replace } = useRouter();
-    const params = new URLSearchParams(searchParams);
-
-    const preventDuplicateFilter = (arr)  => {
-        let a = new Set(arr);
-        return [...a]
-    };
-
-    // this function is used to to send query params into url
-    const handleSearch = (term) => {
-        let previousTerm = params.getAll('filter') || [];
-
-        // if we have a previous item we need to merge our new term
-        // first we need to delete our old filter and make new merged one
-        // it was quite hard to do this                        
-        // // PLEASE DON'T CHANGE UNLESS YOU KNOW WHAT TO DO !!!
-        if (previousTerm.length > 0) {
-            // if we have already a param in url delete it
-            params.delete('filter');
-            console.log(previousTerm, "before push new param");
-
-            let a = previousTerm.join("").split(" ");
-            console.log("try to fix before", a);
-            a.push(term);
-            let b = preventDuplicateFilter(a);
-            console.log("try fixing stage 2", b);
-
-            let newTerm = b.join(' ');
-            params.append('filter', newTerm);
-        } else {
-            params.append('filter', term);
-        }
-
-        replace(`${pathname}?${params.toString()}`);
-        closeDropdown()
     }
 
     /* MENU Functions show hide */
@@ -83,7 +44,7 @@ export default function SearchDropDownWrapper({ data }) {
             props={{
                 data, searchTerm, isOpen, options, filteredOptions,
                 error, setError,
-                toggleDropdown, handleSearch, handleChange
+                toggleDropdown, closeDropdown, handleSearch, handleChange
             }}
         />
     )
@@ -92,10 +53,9 @@ export default function SearchDropDownWrapper({ data }) {
 function DropdownContent(
     { props: { data, searchTerm, isOpen, options, filteredOptions,
         error, setError,
-        toggleDropdown, handleSearch, handleChange
+        toggleDropdown, closeDropdown, handleSearch, handleChange
     } }
 ) {
-    console.log(data)
     const { id, placeholder, Icon } = data;
     return (
         <>
@@ -103,19 +63,20 @@ function DropdownContent(
                 id={id}
                 className={utilityBarClasses.dropDownButton}
                 onClick={toggleDropdown}
-                style={{border: error ? "1px solid red" : ""}}
-                
+                style={{ border: error ? "1px solid red" : "" }}
+
             >
                 <span className={utilityBarClasses.dropDownButtonChildrenWrapper}>
                     <span className={utilityBarClasses.dropDownItemContentImage}>{Icon}</span>
                     <form onSubmit={(e) => {
                         e.preventDefault();
                         let x = options.some(item => {
-                            return searchTerm === item.val
+                            return searchTerm === item.val;
                         })
                         if (x) {
-                            setError(null)
+                            setError(null);
                             handleSearch(searchTerm);
+                            closeDropdown();
                         } else {
                             setError("no Match")
                         }
@@ -135,7 +96,7 @@ function DropdownContent(
             </button>
             {isOpen ? <ul className={utilityBarClasses.dropDownUL}>
                 {filteredOptions.map(({ oid, val, oicon, searchTerm }) => {
-                    return <SearchSuggestionOption key={oid} data={{ oid, val, oicon, handleSearch }} />
+                    return <SearchSuggestionOption key={oid} data={{ oid, val, oicon, handleSearch, closeDropdown }} />
                 })}
             </ul> : null}
         </>
@@ -143,11 +104,15 @@ function DropdownContent(
 }
 
 function SearchSuggestionOption(
-    { data: { oid, val, oicon, searchTerm, handleSearch } }
+    { data: { oid, val, oicon, searchTerm, handleSearch, closeDropdown } }
 ) {
     return (
         <li className={utilityBarClasses.dropDownLI} id={oid}
-            onClick={() => handleSearch(val)} >
+            onClick={() => {
+                closeDropdown();
+                handleSearch(val)
+            }
+            } >
             <div className={utilityBarClasses.dropDownItemContentWrapper}>
                 <Image
                     {...oicon}

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { SiteLogo } from "../common/svg"
+import { SiteLogo } from "../../common/svg"
 
 export default function login() {
     return (

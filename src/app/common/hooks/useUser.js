@@ -3,7 +3,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 
-import { auth } from "@/src/lib/firebase/clientApp.js";
+import { auth } from "../../../lib/firebase/clientApp.js";
 import { useRouter } from "next/navigation";
 
 export function useUser() {

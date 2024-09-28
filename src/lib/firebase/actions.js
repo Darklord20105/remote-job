@@ -13,37 +13,40 @@ import { JobSchema } from './validators';
 export async function createJobPost(formData) {
   console.log(formData, 'from client');
 
-  const processList = (name) => {
-    let a = formData[name];
-    if (!a) return [];
-    let b = a.split(' ');
-    let result = []
-    b.map(i => {
-      i = i.replace(/[^A-Za-z]/g, '');
-      result.push(i);
-    });
-    return result;
-  };
+  function parseValueToNumber(tag) {
+    if (!tag) return 0;
+    return Number(tag.match(/\d+/g).join(''));
+  }
+
   const rawFormData = {
     company: formData['company'],
     position: formData['position'],
-    createdAt: Date.now(),
-    // logo: ,
-    jobClass: formData['jobClass'],
+    jobType: formData['jobType'],
+    tagList: formData['tagList'],
     location: formData['location'],
-    website: formData['website'],
+    
+    logo: null,
+    bgColorToggle: formData['bgColorToggle'],
+    bgColorName: formData['bgColorName'],
+    salaryRangeMin: parseValueToNumber(formData['salaryRangeMin']),
+    salaryRangeMax: parseValueToNumber(formData['salaryRangeMax']),
+    jobDescription: formData['jobDescription'],
+    benefits: formData['benefits'],
+    applyDetails: formData['applyDetails'],
     applyUrl: formData['applyUrl'],
-    salaryRangeMin: formData['salaryRangeMin'],
-    salaryRangeMax: formData['salaryRangeMax'],
+    website: formData['website'],
+    
+    jobClass: formData['jobClass'],
     verified: formData['verified'],
     hot: formData['hot'],
-    jobType: formData['jobType'],
-    tagList: processList('tagList'),
     priority: formData['priority'],
+    
+    createdAt: Timestamp.fromDate(new Date( Date.now() ) ),
   };
   console.log(rawFormData, 'before validation');
 
   // validate data
+  
   const myCollection = collection(db, 'jobList');
   try {
     await JobSchema.validate(rawFormData, { abortEarly: false });
@@ -56,21 +59,36 @@ export async function createJobPost(formData) {
       return acc;
     }, {});
     console.log(errObj)
-    return errObj;
+    // return errObj;
+    return { message:"error", error: errObj };
   }
+  
   // add to db
-  rawFormData.createdAt = Timestamp.fromDate(new Date(rawFormData.createdAt))
   console.log(rawFormData, 'before creating document');
-
   try {
     const docRef = await addDoc(myCollection, rawFormData);
     console.log("Document written with ID: ", docRef.id);
+    return { message:"success", docId: docRef.id };
   } catch (error) {
     console.log("Error adding document: ", error);
+    return error;
   }
   // update page cache and redirect
   revalidatePath('/');
   redirect('/');
+  
+}
+
+export async function updateJobPostWithImage(id, url) {
+  const myDocument = doc(db, 'jobList', id);
+
+  try {
+    const docRef =  await updateDoc(myDocument, {logo: url})
+    // const docRef = await addDoc(myDocument, rawFormData);
+    console.log("Document updated");
+  } catch (error) {
+    console.log("Error adding document: ", error);
+  }
 }
 
 export async function updateJobPost(formData) {

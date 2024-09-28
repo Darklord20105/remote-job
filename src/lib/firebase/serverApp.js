@@ -1,5 +1,6 @@
 // this component is used only in server pages where you place use server at the top of the page
-import "server-only";                                                       import { headers } from "next/headers";
+import "server-only";                                                       
+import { headers } from "next/headers";
 
 import { initializeApp, initializeServerApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -24,3 +25,4 @@ export async function getAuthenticatedAppForUser() {
 
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);
+

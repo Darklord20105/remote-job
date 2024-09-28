@@ -5,8 +5,8 @@ module.exports = {
   ],
   theme: {
     extend: {},
-  },
-  plugins: [],
-  darkMode: 'false',
+    // },
+    plugins: [],
+    darkMode: 'false',
+  }
 }
-

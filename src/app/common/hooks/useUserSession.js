@@ -25,7 +25,7 @@ export function useUserSession(initialUser) {
 			.register(serviceWorkerUrl, {scope: 'http://localhost:3000' })
 			.then((registration) => {
 			  console.log('success')
-			}).catch(err => alert(err.message, 'xxxxxxxxxxx') );
+			}).catch(err => console.log(err.message, 'xxxxxxxxxxx') );
 		}
 	  }, []);
 

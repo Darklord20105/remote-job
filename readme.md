@@ -1,20 +1,26 @@
 ////////////
+h1: tags must be single word or more than word without spaces
+
 project direction shift
-- search bar should always be present and can stack more than one filter in url params
+- search bar should always be present and can stack more than one filter in url params ... ok
 
-- filters can be added on top of each other 
+- - search bar should always be present in home page and job details page ... pending
 
-- note when we click on a tags we are redirected to home page and get items that match this criteria , under the search the criteria or (could be more than one )is displayed with close x to clear this filter and other box to clear all the result contains results number 
+- filters can be added on top of each other ... ok
 
-- if we did a search with more than one citeria ,closing the criteria reloads to get result with remaining criteria only with clear all box
+- note when we click on a tags we are redirected to home page and get items that match this criteria , under the search the criteria or (could be more than one )is displayed with close x to clear this filter and other box to clear all the result contains results number ... ok
 
-- under search bar in details page show goback to home btn 
+- if we did a search with more than one citeria ,closing the criteria reloads to get result with remaining criteria only with clear all box ... ok
 
-- when going to details page display the same component as in home page but expand it up and down to show all tags if there is more than 3, must be no more than 10
-- page job details must look like we expanded the job item
+- under search bar in details page show goback to home btn ... pending
+
+- when going to details page display the same component as in home page but expand it up and down to show all tags if there is more than 3, must be no more than 10 .. pending
+- page job details must look like we expanded the job item ... pending
 
 - note that when going to details page we want same list of jobs in home page as related jobs with infinite scroll
-when click on tag start a search with that filter 
+when click on tag start a search with that filter ... pending
+
+to something like a hook or HOC ,must move logic for sending data to params to a single function to be able to use it later like when you click on a tag you trigger a search ... pending
 //////////////
 
 Home Page Job item structure
@@ -228,3 +234,45 @@ http://localhost:3000
 then enable this option
 
 
+------------
+
+job details page
+// note that we need search bar appear up in everyPage
+// this page would look like we expanded the job item in home page and 
+
+// here is how this component would look Like
+// SideDetails contains
+// 1. company logo ... ok
+// 2. company name ... ok
+// 3. cmpany website link ... ok
+// 4. apply now btn ... ok
+// 5. statistics ... ok
+// views number, number users applied ... ok
+// share job text then input with fixed value ...
+
+// Main Description contains
+// 1. introduction section company x is hiring .. ok
+// 2. job summary section (position, company, location, working hours, Role Type(job type)) ...ok job description
+// 3. about company ... ok job description
+// 4. role overview ... ...ok job description
+// 5. Key Responsibilities: unordered list text: details ...ok job description
+// 6. unordered list (like this nodejs, excel and stuff like this ,app or tech used in job) ... ok job description
+// 7. Qualifications: unordered list (like this : ...ok job description
+// Proven experience as a Senior Back End Engineer. 
+// Strong proficiency in our tech stack. )
+// 8. Why Join Us: resons ... ok job description
+// 9. h1 Salary and compensation title followed by salary range
+// 10. h1 Benefits summarized as unordered list ... ok benefit section
+// 11. last how to apply to job box ... ok apply detail
+// How to Apply: Please send your resume and a cover letter explaining why you are the perfect fit for this role.
+// We look forward to your application! and button
+// some warning down
+// related job list as in home exactly for now its random
+
+--------
+
+cool dashboard
+https://tailwindflex.com/@anonymous/quora-reddit
+
+most styling comes from here
+https://pagedone.io/docs/input
