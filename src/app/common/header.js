@@ -12,7 +12,7 @@ import {
 //   https://tailwindflex.com/@anonymous/quora-reddit?utm_source=fullscreen-preview&utm_medium=footer
 
 const Logo = () => (
-  <div className="flex flex-shrink-0 items-center">
+  <div className="flex flex-shrink-0 items-center mr-4">
     <a href="/">
       <img className="block h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=rose&shade=500" alt="Your Company" />
     </a>

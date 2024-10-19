@@ -63,7 +63,7 @@ export const JobSchema = yup.object().shape({
   }),
   jobDescription: yup.string().required()
 	.min(100, 'must add at least 100 charachters')
-	.max(10000, "your text shouldnt't excceed 10000 charachters "),
+	.max(1000000, "your text shouldnt't excceed 1000000 charachters "),
   benefits: yup.lazy((value) =>
     yup.object(
       Object.keys(value || {}).reduce((acc, key) => {

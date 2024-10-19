@@ -68,14 +68,16 @@ export async function createJobPost(formData) {
   try {
     const docRef = await addDoc(myCollection, rawFormData);
     console.log("Document written with ID: ", docRef.id);
-    return { message:"success", docId: docRef.id };
+    revalidatePath('/');
+    redirect('/');
+    // { message:"success", docId: docRef.id };
   } catch (error) {
     console.log("Error adding document: ", error);
     return error;
   }
   // update page cache and redirect
-  revalidatePath('/');
-  redirect('/');
+  /*revalidatePath('/');
+  redirect('/'); */
   
 }
 

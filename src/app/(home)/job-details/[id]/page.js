@@ -26,7 +26,9 @@ import {
   NodeJsSvg,
   HtmlSvg,
   CssSvg,
-} from "../../../common/svg"
+} from "../../../common/svg";
+import chroma from "chroma-js";
+
 
 const text = `
 ABOUT THE ROLE
@@ -119,6 +121,14 @@ export default function JobDetails() {
   const timeAgoPeriod = timeAgo(formattedDate);
   const jobDescriptionParsedContent = convertHtmlToReact(jobDescription);
   console.log(formattedDate);
+  // Example using chroma.js
+  let userColor = chroma(bgColorName).brighten(1.5).hex(); // Lighten the color
+  // Determine if the background is light or dark based on luminance
+  let luminance = chroma(bgColorName).luminance();
+
+  // If the color is light, set the text to black; if it's dark, set it to white
+  let textColor = luminance > 0.5 ? '#000000' : '#FFFFFF';
+
 
   return (
     <div className="-mx-4  sm:-mx-8 px-4 sm:px-8 py-4 flex flex-col">
@@ -132,11 +142,11 @@ export default function JobDetails() {
 	    style={{
 	      background: 'rgb(255,0,255)', 
 	      background: `linear-gradient(180deg, 
-		${hexToRGBA(bgColorName, 1)} 0%,
+		${hexToRGBA(userColor, 1)} 0%,
 		rgba(255,255,255,1) 100%)`}}
 	  >                    
-	    <div>
-	      <h2 className="text-2xl font-light  mt-6">
+	    <div className='mt-6'>
+	      <h2 className="text-3xl font-light  mt-6">
 	  	{company} is Hiring :
 	      </h2>
         	<h1 className="text-4xl font-bold mb-4">{position}</h1>
@@ -198,7 +208,7 @@ function SideDetails({ data: {
         </div>
       </div>
       <hr className="my-6 border-t border-gray-300" />
-
+	{/*
       <div className="flex flex-col items-center text-center text-sm">
         <div className='mb-2 flex items-center'>
           <div className='w-6 h-6 mr-2' >
@@ -211,6 +221,7 @@ function SideDetails({ data: {
       </div>
 
       <hr className="my-6 border-t border-gray-300" />
+      */}
       <div className="flex flex-col justify-center items-center">
         <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">HighLights</span>
         <ul>

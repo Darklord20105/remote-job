@@ -7,6 +7,7 @@ import money from '../../../assets/img/money-bag.svg'
 import temp from '../../../assets/img/temp.svg';
 // import logo from '../../../assets/img/logo.jpeg';
 import { formatTimestampToDate, timeAgo } from '../../../utils/helper';
+import chroma from "chroma-js";
 
 function Info({ data: { text, img } }) {
   return (
@@ -60,7 +61,7 @@ function LogoImage({logo}) {
 /// was 20, 16, 24 
 function Details({ props: { company, position, verified } }) {
   return (
-    <div className={"flex flex-col justify-start text-black"}>
+    <div className="flex flex-col justify-start">
       <p className="font-bold text-[16px] overflow-hidden">{position}
 	  {verified && <span className='bg-lime-300 text-white text-[12.8px] px-2 py-1 ml-3 rounded-lg'>VERIFIED</span>}
       </p>
@@ -83,7 +84,16 @@ export default function FeedItem({
   const timeAgoPeriod = timeAgo(formattedDate);
   const date = timeAgoPeriod.substring(0, timeAgoPeriod.length - 4);
 
-  let styling = priorityHandler(priority);
+  // Example using chroma.js
+  let userColor = chroma(bgColorName).brighten(1.5).hex(); // Lighten the color
+
+  // Determine if the background is light or dark based on luminance
+  let luminance = chroma(bgColorName).luminance();
+
+  // If the color is light, set the text to black; if it's dark, set it to white
+  let textColor = luminance > 0.5 ? '#000000' : '#FFFFFF';
+
+  //let styling = priorityHandler(priority);
   // const { bg, text } = styling;
   const salary = `$${salaryRangeMin/1000}k - $${salaryRangeMax/1000}k`
 
@@ -94,8 +104,13 @@ export default function FeedItem({
         expand ?                                                                                                    
 	  { borderBottom:'none',
             borderRadius: '8px 8px 0px 0px',
-            backgroundColor: bgColorName
-          } :  { backgroundColor: bgColorName }
+	    padding: '0.5rem',
+            backgroundColor: userColor,
+	    color: textColor
+          } :  { 
+	    backgroundColor: userColor,
+	    color: textColor,
+	  }
       }
     >
       {/* section 1 logo alone */}
@@ -122,7 +137,7 @@ export default function FeedItem({
           return <Tag key={i} data={{ text: i, handleSearch }} />
         })}
       </div>
-      <div className={'flex w-40 ml-auto justify-center text-black items-center sm-hidden font-semibold'}>
+      <div className={'flex w-40 ml-auto justify-center items-center sm-hidden font-semibold'}>
         <p>{date}</p>
       </div>
     </div>
